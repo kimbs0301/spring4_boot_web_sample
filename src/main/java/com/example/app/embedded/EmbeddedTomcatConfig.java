@@ -1,5 +1,7 @@
 package com.example.app.embedded;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.valves.AccessLogValve;
+import org.apache.coyote.http11.Http11Nio2Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author gimbyeongsu
@@ -49,7 +53,7 @@ public class EmbeddedTomcatConfig {
 		String contextPath = environment.getRequiredProperty("context.path");
 		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(contextPath, port);
 
-		factory.setProtocol("org.apache.coyote.http11.Http11NioProtocol");
+		factory.setBaseProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
 		MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
 		mappings.add("html", "text/html;charset=UTF-8");
 		mappings.add("file", "multipart/form-data");
@@ -89,11 +93,14 @@ public class EmbeddedTomcatConfig {
 
 			@Override
 			public void customize(Connector connector) {
+				connector.setEnableLookups(false);
+				connector.setURIEncoding("UTF-8");
+				connector.setXpoweredBy(false);
+				
 				connector.setProperty("maxProcessors", "150");
 				connector.setProperty("maxThreads", "150");
-				connector.setProperty("minSpareThreads", "25");
-				connector.setProperty("maxSpareThreads", "75");
-				connector.setProperty("acceptCount", "150");
+				connector.setProperty("minSpareThreads", "150");
+				connector.setProperty("maxSpareThreads", "150");
 				connector.setProperty("socket.directBuffer", "true");
 				connector.setProperty("socket.rxBufSize", "25188");
 				connector.setProperty("socket.txBufSize", "43800");
@@ -106,15 +113,14 @@ public class EmbeddedTomcatConfig {
 				connector.setProperty("socket.eventCache", "500");
 				connector.setProperty("socket.tcpNoDelay", "true");
 				connector.setProperty("socket.soKeepAlive", "false");
+				connector.setProperty("acceptCount", "30");
 				connector.setProperty("connectionTimeout", "3000");
+				connector.setProperty("connectionLinger", "0");
 				connector.setProperty("socket.soTimeout", "5000");
 				connector.setProperty("useComet", "false");
 				connector.setProperty("compression", "on");
 				connector.setProperty("compressionMinSize", "2048");
 				connector.setProperty("compressableMimeType", "text/html,text/xml,text/plain,application/json");
-				connector.setEnableLookups(false);
-				connector.setURIEncoding("UTF-8");
-				connector.setXpoweredBy(false);
 			}
 		});
 
@@ -122,6 +128,60 @@ public class EmbeddedTomcatConfig {
 		servletContextInitializers.add(new EmbeddedTomcatWebInitalizer());
 		factory.setInitializers(servletContextInitializers);
 
+		factory.addAdditionalTomcatConnectors(createSslConnector());
+		
+		LOGGER.error("");
+		
 		return factory;
+	}
+	
+	private Connector createSslConnector() {
+		Connector connector = new Connector("org.apache.coyote.http11.Http11Nio2Protocol");
+		connector.setURIEncoding("UTF-8");
+		Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
+		try {
+			File keystore = new ClassPathResource("ssl/tomcat.jks").getFile();
+			File truststore = new ClassPathResource("ssl/truststore.jks").getFile();
+			connector.setScheme("https");
+			connector.setSecure(true);
+			connector.setPort(8443);
+			connector.setEnableLookups(false);
+			
+			connector.setProperty("maxProcessors", "10");
+			connector.setProperty("maxThreads", "10");
+			connector.setProperty("minSpareThreads", "10");
+			connector.setProperty("maxSpareThreads", "10");
+			connector.setProperty("socket.directBuffer", "true");
+			connector.setProperty("socket.rxBufSize", "25188");
+			connector.setProperty("socket.txBufSize", "43800");
+			connector.setProperty("socket.appReadBufSize", "32768");
+			connector.setProperty("socket.appWriteBufSize", "32768");
+			connector.setProperty("socket.bufferPool", "50");
+			connector.setProperty("socket.bufferPoolSize", "10000000");
+			connector.setProperty("socket.processorCache", "500");
+			connector.setProperty("socket.keyCache", "500");
+			connector.setProperty("socket.eventCache", "500");
+			connector.setProperty("socket.tcpNoDelay", "true");
+			connector.setProperty("socket.soKeepAlive", "false");
+			connector.setProperty("acceptCount", "10");
+			connector.setProperty("connectionTimeout", "3000");
+			connector.setProperty("connectionLinger", "0");
+			connector.setProperty("socket.soTimeout", "5000");
+			connector.setProperty("useComet", "false");
+			
+			protocol.setSSLEnabled(true);
+			protocol.setKeystoreFile(keystore.getAbsolutePath());
+			protocol.setKeystorePass("123456");
+			protocol.setTruststoreFile(truststore.getAbsolutePath());
+			protocol.setTruststorePass("123456");
+			protocol.setClientAuth("false");
+			
+			protocol.setKeyAlias("tomcat_server");
+			protocol.setSslProtocol("TLS");
+			return connector;
+		} catch (IOException ex) {
+			throw new IllegalStateException("can't access keystore: ["
+					+ "keystore" + "] or truststore: [" + "keystore" + "]", ex);
+		}
 	}
 }
