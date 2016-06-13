@@ -1,3 +1,5 @@
+-Djava.security.egd=file:/dev/./urandom -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark -XX:InitiatingHeapOccupancyPercent=35
+
 cd /workspace/luna/spring4_boot_web_sample
 git add -A
 git commit -a -m "ok"
