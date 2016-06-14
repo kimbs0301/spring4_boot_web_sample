@@ -11,6 +11,7 @@
 <spring:url value="/static/css/bootstrap.min.css" var="bootstrapCss" />
 <spring:url value="/static/js/jquery.1.10.2.min.js" var="jqueryJs" />
 <link href="${bootstrapCss}" rel="stylesheet" />
+<link rel="icon" type="image/x-icon" href="${webProp['context.path']}/static/img/favicon.ico">
 <script src="${jqueryJs}"></script>
 <script>
 $(document).ready(function($) {
