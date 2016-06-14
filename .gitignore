@@ -8,3 +8,4 @@
 /.springBeans
 /target/
 /tomcat.8080/
+/.apt_generated/
