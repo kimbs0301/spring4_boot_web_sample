@@ -21,8 +21,6 @@ import com.example.spring.config.WebMvcConfig;
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
-	// http://peyton.tk/index.php/post/20
-
 	public Application() {
 		LOGGER.debug("생성자 Application()");
 	}
@@ -30,7 +28,7 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		LOGGER.debug("start");
 		SpringApplicationBuilder springApplicationBuilder = new SpringApplicationBuilder(Application.class);
-		SpringApplication springApplication = springApplicationBuilder.profiles("local").build();
+		SpringApplication springApplication = springApplicationBuilder.build();
 		springApplication.run();
 	}
 }

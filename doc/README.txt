@@ -1,7 +1,6 @@
--Djava.security.egd=file:/dev/./urandom -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark -XX:InitiatingHeapOccupancyPercent=35
+java -server -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+G1SummarizeConcMark -XX:InitiatingHeapOccupancyPercent=35 -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=local -jar target/spring-0.0.1-SNAPSHOT.jar
 
-export CLASSPATH=.:/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/lib/tools.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/bin/java -server -jar target/spring-0.0.1-SNAPSHOT.jar
+java -server -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:InitiatingHeapOccupancyPercent=35 -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=local -jar spring-0.0.1-SNAPSHOT.jar
 
 mvn install -DskipTests
 
@@ -17,3 +16,5 @@ curl -v -H "Accept: application/json" "http://localhost:8080/mvc/account/member/
 http://localhost:8080/mvc/ajax/searchCriteria
 
 http://localhost:8080/mvc/file/uploadForm
+
+http://peyton.tk/index.php/post/20
