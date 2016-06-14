@@ -1,7 +1,6 @@
 package com.example.app.embedded;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author gimbyeongsu
@@ -115,7 +113,7 @@ public class EmbeddedTomcatConfig {
 				connector.setProperty("socket.soKeepAlive", "false");
 				connector.setProperty("acceptCount", "30");
 				connector.setProperty("connectionTimeout", "3000");
-				connector.setProperty("connectionLinger", "0");
+				// connector.setProperty("connectionLinger", "0");
 				connector.setProperty("socket.soTimeout", "5000");
 				connector.setProperty("useComet", "false");
 				connector.setProperty("compression", "on");
@@ -129,9 +127,6 @@ public class EmbeddedTomcatConfig {
 		factory.setInitializers(servletContextInitializers);
 
 		factory.addAdditionalTomcatConnectors(createSslConnector());
-		
-		LOGGER.error("");
-		
 		return factory;
 	}
 	
@@ -139,49 +134,44 @@ public class EmbeddedTomcatConfig {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11Nio2Protocol");
 		connector.setURIEncoding("UTF-8");
 		Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
-		try {
-			File keystore = new ClassPathResource("ssl/tomcat.jks").getFile();
-			File truststore = new ClassPathResource("ssl/truststore.jks").getFile();
-			connector.setScheme("https");
-			connector.setSecure(true);
-			connector.setPort(8443);
-			connector.setEnableLookups(false);
-			
-			connector.setProperty("maxProcessors", "10");
-			connector.setProperty("maxThreads", "10");
-			connector.setProperty("minSpareThreads", "10");
-			connector.setProperty("maxSpareThreads", "10");
-			connector.setProperty("socket.directBuffer", "true");
-			connector.setProperty("socket.rxBufSize", "25188");
-			connector.setProperty("socket.txBufSize", "43800");
-			connector.setProperty("socket.appReadBufSize", "32768");
-			connector.setProperty("socket.appWriteBufSize", "32768");
-			connector.setProperty("socket.bufferPool", "50");
-			connector.setProperty("socket.bufferPoolSize", "10000000");
-			connector.setProperty("socket.processorCache", "500");
-			connector.setProperty("socket.keyCache", "500");
-			connector.setProperty("socket.eventCache", "500");
-			connector.setProperty("socket.tcpNoDelay", "true");
-			connector.setProperty("socket.soKeepAlive", "false");
-			connector.setProperty("acceptCount", "10");
-			connector.setProperty("connectionTimeout", "3000");
-			connector.setProperty("connectionLinger", "0");
-			connector.setProperty("socket.soTimeout", "5000");
-			connector.setProperty("useComet", "false");
-			
-			protocol.setSSLEnabled(true);
-			protocol.setKeystoreFile(keystore.getAbsolutePath());
-			protocol.setKeystorePass("123456");
-			protocol.setTruststoreFile(truststore.getAbsolutePath());
-			protocol.setTruststorePass("123456");
-			protocol.setClientAuth("false");
-			
-			protocol.setKeyAlias("tomcat_server");
-			protocol.setSslProtocol("TLS");
-			return connector;
-		} catch (IOException ex) {
-			throw new IllegalStateException("can't access keystore: ["
-					+ "keystore" + "] or truststore: [" + "keystore" + "]", ex);
-		}
+		File keystore = new File("file/ssl/tomcat.jks");
+		File truststore = new File("file/ssl/truststore.jks");
+		connector.setScheme("https");
+		connector.setSecure(true);
+		connector.setPort(8443);
+		connector.setEnableLookups(false);
+		
+		connector.setProperty("maxProcessors", "10");
+		connector.setProperty("maxThreads", "10");
+		connector.setProperty("minSpareThreads", "10");
+		connector.setProperty("maxSpareThreads", "10");
+		connector.setProperty("socket.directBuffer", "true");
+		connector.setProperty("socket.rxBufSize", "25188");
+		connector.setProperty("socket.txBufSize", "43800");
+		connector.setProperty("socket.appReadBufSize", "32768");
+		connector.setProperty("socket.appWriteBufSize", "32768");
+		connector.setProperty("socket.bufferPool", "50");
+		connector.setProperty("socket.bufferPoolSize", "10000000");
+		connector.setProperty("socket.processorCache", "500");
+		connector.setProperty("socket.keyCache", "500");
+		connector.setProperty("socket.eventCache", "500");
+		connector.setProperty("socket.tcpNoDelay", "true");
+		connector.setProperty("socket.soKeepAlive", "false");
+		connector.setProperty("acceptCount", "10");
+		connector.setProperty("connectionTimeout", "3000");
+		// connector.setProperty("connectionLinger", "0");
+		connector.setProperty("socket.soTimeout", "5000");
+		connector.setProperty("useComet", "false");
+		
+		protocol.setSSLEnabled(true);
+		protocol.setKeystoreFile(keystore.getAbsolutePath());
+		protocol.setKeystorePass("123456");
+		protocol.setTruststoreFile(truststore.getAbsolutePath());
+		protocol.setTruststorePass("123456");
+		protocol.setClientAuth("false");
+		
+		protocol.setKeyAlias("tomcat_server");
+		protocol.setSslProtocol("TLS");
+		return connector;
 	}
 }
