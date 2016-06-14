@@ -9,6 +9,14 @@ mvn clean install -DskipTests
 mvn install -DskipTests
 
 
+배포시 디렉터리 구조
+./file/ssl
+./logback.xml
+./spring-0.0.1-SNAPSHOT.jar
+./src/main/webapp/WEB-INF
+./src/main/webapp/static
+
+
 cd /workspace/luna/spring4_boot_web_sample
 git add -A
 git commit -a -m "ok"
