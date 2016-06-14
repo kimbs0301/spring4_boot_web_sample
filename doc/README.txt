@@ -2,7 +2,12 @@ java -server -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:+
 
 java -server -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:InitiatingHeapOccupancyPercent=35 -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=local -jar spring-0.0.1-SNAPSHOT.jar
 
+java -server -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UnlockDiagnosticVMOptions -XX:InitiatingHeapOccupancyPercent=35 -Dlogging.config=logback.xml -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=svc -jar spring-0.0.1-SNAPSHOT.jar
+
+mvn clean install -DskipTests
+
 mvn install -DskipTests
+
 
 cd /workspace/luna/spring4_boot_web_sample
 git add -A
