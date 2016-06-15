@@ -19,7 +19,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 @ActiveProfiles(profiles = { "junit" })
 @TestPropertySource(locations = "classpath:application-junit.properties")
-// @Transactional
 public class JunitConfigTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JunitConfigTest.class);
 

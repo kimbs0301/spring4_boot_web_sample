@@ -35,12 +35,6 @@ http://localhost:8080/mvc/file/uploadForm
 
 http://peyton.tk/index.php/post/20
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples
-
-
-CREATE TABLE `member_log` (
-  `member_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `action` varchar(10) NOT NULL,
-  `crt_date` datetime NOT NULL,
-  PRIMARY KEY (`member_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+https://blog.outsider.ne.kr/882
+http://egloos.zum.com/kwon37xi/v/4886947
+https://github.com/kwon37xi/ChainedTransactionManagerTest

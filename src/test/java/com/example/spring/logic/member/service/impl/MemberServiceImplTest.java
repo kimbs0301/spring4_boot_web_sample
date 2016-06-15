@@ -1,4 +1,4 @@
-package com.example.spring.logic.account.service.impl;
+package com.example.spring.logic.member.service.impl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.junit.JunitConfig;
-import com.example.spring.logic.account.service.AccountService;
+import com.example.spring.logic.member.service.MemberService;
 
 /**
  * @author gimbyeongsu
@@ -24,14 +24,14 @@ import com.example.spring.logic.account.service.AccountService;
 @ActiveProfiles(profiles = { "junit" })
 @TestPropertySource(locations = "classpath:application-junit.properties")
 @Transactional
-public class AccountServiceImplTest {
+public class MemberServiceImplTest {
 
 	@Autowired
-	private AccountService accountService;
+	private MemberService memberService;
 	
 	@Test
 	@Rollback(true)
-	public void test2() throws Exception {
-		accountService.test2();
+	public void test() throws Exception {
+		memberService.test();
 	}
 }

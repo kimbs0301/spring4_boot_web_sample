@@ -9,28 +9,27 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.spring.logic.account.dao.AccountDao;
-import com.example.spring.logic.account.model.Account;
+import com.example.spring.logic.account.dao.AccountLogDao;
+import com.example.spring.logic.account.model.AccountLog;
 
 /**
  * @author gimbyeongsu
  * 
  */
 @Repository
-public class AccountDaoImpl implements AccountDao {
-
+public class AccountLogDaoImpl implements AccountLogDao {
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
-	@Qualifier("dataSourceData")
+	@Qualifier("dataSourceLog")
 	public void set(DataSource dataSource) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
 	@Override
-	public void insert(Account param) {
-		Object[] args = new Object[] { param.getId(), param.getAmount() };
-		int[] types = new int[] { Types.INTEGER , Types.INTEGER };
-		jdbcTemplate.update("INSERT INTO account(id, amount) VALUES(?,?)" , args , types);
+	public void insert(AccountLog param) {
+		Object[] args = new Object[] { param.getText() };
+		int[] types = new int[] { Types.VARCHAR };
+		jdbcTemplate.update("INSERT INTO account_log(text, crt_date) VALUES(?,current_timestamp)" , args , types);
 	}
 }

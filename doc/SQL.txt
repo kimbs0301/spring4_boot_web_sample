@@ -1,0 +1,40 @@
+create database test_data;
+create database test_log;
+create database test_shard0;
+create database test_shard1;
+
+CREATE TABLE test_data.`account` (
+  `id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+CREATE TABLE test_log.`account_log` (
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `text` varchar(10) NOT NULL,
+  `crt_date` datetime NOT NULL,
+  PRIMARY KEY (`no`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE test_shard0.`member` (
+  `id` int(11) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE test_shard1.`member` (
+  `id` int(11) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+select * from test_data.account;
+select * from test_log.account_log;
+select * from test_shard0.member;
+select * from test_shard1.member;
+
+delete from test_data.account;
+delete from test_log.account_log;
+delete from test_shard0.member;
+delete from test_shard1.member;
