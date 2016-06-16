@@ -57,4 +57,24 @@ public class MemberServiceImpl implements MemberService {
 		member1.setName("name1");
 		memberDao.insert(member1);
 	}
+
+	@Override
+	@Transactional
+	public void register(Member member) {
+		LOGGER.debug("");
+		
+		memberDao.insert(member);
+		
+		Account account = new Account();
+		account.setId(member.getId());
+		account.setAmount(100);
+		accountDao.insert(account);
+		
+		AccountLog accountLog = new AccountLog();
+		accountLog.setText("BB");
+		accountLogDao.insert(accountLog);
+		
+		String s = "";
+		s.substring(0, 10);
+	}
 }

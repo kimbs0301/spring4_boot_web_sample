@@ -33,6 +33,10 @@ http://localhost:8080/mvc/ajax/searchCriteria
 
 http://localhost:8080/mvc/file/uploadForm
 
+curl -v -X POST -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" -d '{"id":111,"name":"KKK"}' "http://localhost:8080/mvc/member/register.json"
+
+
+
 http://peyton.tk/index.php/post/20
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples
 https://blog.outsider.ne.kr/882

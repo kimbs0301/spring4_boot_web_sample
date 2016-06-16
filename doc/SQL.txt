@@ -53,8 +53,12 @@ select * from test_data.account;
 select * from test_log.account_log;
 select * from test_shard0.member;
 select * from test_shard1.member;
+select * from test_shard0.user;
+select * from test_shard1.user;
 
 delete from test_data.account;
 delete from test_log.account_log;
 delete from test_shard0.member;
 delete from test_shard1.member;
+delete from test_shard0.user;
+delete from test_shard1.user;
