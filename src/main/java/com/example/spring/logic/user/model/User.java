@@ -1,11 +1,11 @@
 package com.example.spring.logic.user.model;
 
-
 /**
  * @author gimbyeongsu
  * 
  */
 public class User {
+	private int id;
 	private String username;
 	private String password;
 	private String email;
@@ -21,6 +21,14 @@ public class User {
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -65,7 +73,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", email=" + email + ", phone=" + phone
-				+ ", address=" + address + "]";
+		return "User [username=" + username + ", password=" + password + ", email=" + email + ", phone=" + phone + ", address=" + address + "]";
 	}
 }

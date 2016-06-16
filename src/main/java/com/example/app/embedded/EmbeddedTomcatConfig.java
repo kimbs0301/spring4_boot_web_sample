@@ -52,7 +52,8 @@ public class EmbeddedTomcatConfig {
 		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(contextPath, port);
 
 		factory.setBaseProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
-		MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
+		// MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
+		MimeMappings mappings = new MimeMappings();
 		mappings.add("html", "text/html;charset=UTF-8");
 		mappings.add("file", "multipart/form-data");
 		mappings.add("json", "application/json;charset=UTF-8");
@@ -62,9 +63,11 @@ public class EmbeddedTomcatConfig {
 		factory.setUriEncoding(Charset.forName("UTF-8"));
 
 		AccessLogValve accessLogValve = new AccessLogValve();
-		accessLogValve.setDirectory("/temp");
+		accessLogValve.setFileDateFormat("_yyyy_MM_dd");
+		accessLogValve.setRequestAttributesEnabled(true);
+		accessLogValve.setDirectory(environment.getRequiredProperty("server.tomcat.accesslog.directory"));
 		// '%h %l %u %t "%r" %s %b %D'
-		accessLogValve.setPattern("%{yyyy-MM-dd HH:mm:ss}t\t%a\t%r\t%{Referer}i\t%{User-Agent}i\t%D\t%I");
+		accessLogValve.setPattern(environment.getRequiredProperty("server.tomcat.accesslog.pattern"));
 		accessLogValve.setSuffix(".log");
 		factory.addContextValves(accessLogValve);
 
@@ -133,9 +136,6 @@ public class EmbeddedTomcatConfig {
 	private Connector createSslConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11Nio2Protocol");
 		connector.setURIEncoding("UTF-8");
-		Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
-		File keystore = new File("file/ssl/tomcat.jks");
-		File truststore = new File("file/ssl/truststore.jks");
 		connector.setScheme("https");
 		connector.setSecure(true);
 		connector.setPort(8443);
@@ -163,13 +163,15 @@ public class EmbeddedTomcatConfig {
 		connector.setProperty("socket.soTimeout", "5000");
 		connector.setProperty("useComet", "false");
 		
+		Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
+		File keystore = new File("file/ssl/tomcat.jks");
+		File truststore = new File("file/ssl/truststore.jks");
 		protocol.setSSLEnabled(true);
 		protocol.setKeystoreFile(keystore.getAbsolutePath());
 		protocol.setKeystorePass("123456");
 		protocol.setTruststoreFile(truststore.getAbsolutePath());
 		protocol.setTruststorePass("123456");
 		protocol.setClientAuth("false");
-		
 		protocol.setKeyAlias("tomcat_server");
 		protocol.setSslProtocol("TLS");
 		return connector;
