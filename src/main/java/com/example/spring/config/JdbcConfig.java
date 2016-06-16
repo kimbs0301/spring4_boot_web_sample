@@ -35,7 +35,7 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 		LOGGER.debug("생성자 JdbcConfig()");
 	}
 
-	@Bean(name = "dataSourceData", destroyMethod = "close")
+	@Bean(name = "dsData", destroyMethod = "close")
 	public DataSource dataSourceData() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -52,7 +52,7 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 		return dataSource;
 	}
 
-	@Bean(name = "dataSourceLog", destroyMethod = "close")
+	@Bean(name = "dsLog", destroyMethod = "close")
 	public DataSource dataSourceLog() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -69,7 +69,7 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 		return dataSource;
 	}
 
-	@Bean(name = "dataSourceShard0", destroyMethod = "close")
+	@Bean(name = "dsShard0", destroyMethod = "close")
 	public DataSource dataSourceShard0() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -86,7 +86,7 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 		return dataSource;
 	}
 
-	@Bean(name = "dataSourceShard1", destroyMethod = "close")
+	@Bean(name = "dsShard1", destroyMethod = "close")
 	public DataSource dataSourceShard1() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -107,49 +107,49 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 	@Bean(name = "dataSourceShards")
 	public List<DataSource> dataSourceShards() {
 		List<DataSource> dataSources = new ArrayList<>();
-		dataSources.add(dataSourceShard0());
-		dataSources.add(dataSourceShard1());
+		dataSources.add(shard0LazyDataSource());
+		dataSources.add(shard1LazyDataSource());
 		return dataSources;
 	}
 
-	@Bean
+	@Bean(name = "dataSourceData")
 	public DataSource dataLazyDataSource() {
 		return new LazyConnectionDataSourceProxy(dataSourceData());
 	}
 
-	@Bean
+	@Bean(name = "dataSourceLog")
 	public DataSource logLazyDataSource() {
 		return new LazyConnectionDataSourceProxy(dataSourceLog());
 	}
 
-	@Bean
+	@Bean(name = "dataSourceShard0")
 	public DataSource shard0LazyDataSource() {
 		return new LazyConnectionDataSourceProxy(dataSourceShard0());
 	}
 
-	@Bean
+	@Bean(name = "dataSourceShard1")
 	public DataSource shard1LazyDataSource() {
 		return new LazyConnectionDataSourceProxy(dataSourceShard1());
 	}
 
 	@Bean
 	public PlatformTransactionManager dataTransactionManager() {
-		return new DataSourceTransactionManager(dataSourceData());
+		return new DataSourceTransactionManager(dataLazyDataSource());
 	}
 
 	@Bean
 	public PlatformTransactionManager logTransactionManager() {
-		return new DataSourceTransactionManager(dataSourceLog());
+		return new DataSourceTransactionManager(logLazyDataSource());
 	}
 
 	@Bean
 	public PlatformTransactionManager shard0TransactionManager() {
-		return new DataSourceTransactionManager(dataSourceShard0());
+		return new DataSourceTransactionManager(shard0LazyDataSource());
 	}
 
 	@Bean
 	public PlatformTransactionManager shard1TransactionManager() {
-		return new DataSourceTransactionManager(dataSourceShard1());
+		return new DataSourceTransactionManager(shard1LazyDataSource());
 	}
 
 	// @Bean(name = "txManager")

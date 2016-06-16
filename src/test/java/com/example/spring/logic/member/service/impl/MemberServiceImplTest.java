@@ -2,6 +2,8 @@ package com.example.spring.logic.member.service.impl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
@@ -25,13 +27,15 @@ import com.example.spring.logic.member.service.MemberService;
 @TestPropertySource(locations = "classpath:application-junit.properties")
 @Transactional
 public class MemberServiceImplTest {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImplTest.class);
+	
 	@Autowired
 	private MemberService memberService;
 	
 	@Test
 	@Rollback(true)
 	public void test() throws Exception {
+		LOGGER.debug("");
 		memberService.test();
 	}
 }

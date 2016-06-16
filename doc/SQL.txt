@@ -9,7 +9,6 @@ CREATE TABLE test_data.`account` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
 CREATE TABLE test_log.`account_log` (
   `no` int(11) NOT NULL AUTO_INCREMENT,
   `text` varchar(10) NOT NULL,
