@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingWebMvcConfig.class);
 	
-	private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
+	private final WebMvcConfigComposite configurers = new WebMvcConfigComposite();
 	
 	@Autowired
 	private ObjectMapper objectMapper;

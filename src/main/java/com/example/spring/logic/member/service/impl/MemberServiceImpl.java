@@ -75,6 +75,6 @@ public class MemberServiceImpl implements MemberService {
 		accountLogDao.insert(accountLog);
 		
 		String s = "";
-		s.substring(0, 10);
+		s.substring(0, 10); // exception
 	}
 }

@@ -10,14 +10,14 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 
 import com.example.app.embedded.EmbeddedTomcatConfig;
-import com.example.spring.config.WebMvcConfig;
+import com.example.spring.config.WebAppContextConfig;
 
 /**
  * @author gimbyeongsu
  * 
  */
 @Configurable
-@ComponentScan(basePackages = { "com.example.spring" }, basePackageClasses = { EmbeddedTomcatConfig.class }, excludeFilters = @Filter(value = { WebMvcConfig.class }, type = FilterType.ASSIGNABLE_TYPE))
+@ComponentScan(basePackages = { "com.example.spring" }, basePackageClasses = { EmbeddedTomcatConfig.class }, excludeFilters = @Filter(value = { WebAppContextConfig.class }, type = FilterType.ASSIGNABLE_TYPE))
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

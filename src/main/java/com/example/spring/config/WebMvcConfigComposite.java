@@ -26,12 +26,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * org.springframework.web.servlet.config.annotation.WebMvcConfigurerComposite
  */
-class WebMvcConfigurerComposite implements WebMvcConfigurer {
-	private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfigurerComposite.class);
+class WebMvcConfigComposite implements WebMvcConfigurer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfigComposite.class);
 	
 	private final List<WebMvcConfigurer> delegates = new ArrayList<WebMvcConfigurer>();
 	
-	public WebMvcConfigurerComposite() {
+	public WebMvcConfigComposite() {
 		LOGGER.debug("생성자 WebMvcConfigurerComposite()");
 	}
 

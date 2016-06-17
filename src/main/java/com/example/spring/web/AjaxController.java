@@ -65,6 +65,14 @@ public class AjaxController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/error", method = RequestMethod.GET)
+	public String goError() {
+		String s = "";
+		s.substring(0, 10); // exception
+		
+		return "error";
+	}
 
 	private boolean isValidSearchCriteria(SearchCriteria search) {
 		boolean valid = true;

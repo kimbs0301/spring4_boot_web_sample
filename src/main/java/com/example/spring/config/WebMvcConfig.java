@@ -2,22 +2,29 @@ package com.example.spring.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.web.OrderedHiddenHttpMethodFilter;
+import org.springframework.boot.context.web.OrderedHttpPutFormContentFilter;
+import org.springframework.boot.context.web.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.accept.ContentNegotiationManager;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+import org.springframework.web.servlet.view.InternalResourceView;
 
+import com.example.spring.config.filter.CommonFilter;
 import com.example.spring.config.viewresolver.JsonViewResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author gimbyeongsu
  * 
  */
+@DependsOn(value = { "rootConfig" })
 @Configuration
 public class WebMvcConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfig.class);
@@ -34,6 +42,48 @@ public class WebMvcConfig {
 
 	public WebMvcConfig() {
 		LOGGER.debug("생성자 WebMvcConfig()");
+	}
+
+	@Bean
+	public FilterRegistrationBean commonFilter() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new CommonFilter());
+		// registration.setEnabled(false);
+		registration.setName("commonFilter");
+		registration.addUrlPatterns("/*");
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean characterEncodingFilter() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new CharacterEncodingFilter("UTF-8", true));
+		registration.setName("characterEncodingFilter");
+		registration.addUrlPatterns("/*");
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean hiddenHttpMethodFilter() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new OrderedHiddenHttpMethodFilter());
+		registration.setName("hiddenHttpMethodFilter");
+		registration.addUrlPatterns("/*");
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean httpPutFormContentFilter() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new OrderedHttpPutFormContentFilter());
+		registration.setName("httpPutFormContentFilter");
+		registration.addUrlPatterns("/*");
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean requestContextFilter() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new OrderedRequestContextFilter());
+		registration.setEnabled(true);
+		registration.setName("requestContextFilter");
+		registration.addUrlPatterns("/*");
+		return registration;
 	}
 
 	@Bean
@@ -72,18 +122,32 @@ public class WebMvcConfig {
 		return commonsMultipartResolver;
 	}
 
-	@Bean(name = "simpleMappingExceptionResolver")
-	public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
-		SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
-
-		Properties mappings = new Properties();
-		mappings.setProperty("DatabaseException", "databaseError");
-		mappings.setProperty("InvalidCreditCardException", "creditCardError");
-
-		r.setExceptionMappings(mappings); // None by default
-		r.setDefaultErrorView("error"); // No default
-		r.setExceptionAttribute("ex"); // Default is "exception"
-		r.setWarnLogCategory("example.MvcLogger"); // No default
-		return r;
+	@Bean(name = "jsonView")
+	public MappingJackson2JsonView mappingJackson2JsonView() {
+		MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
+		jsonView.setContentType("application/json; charset=UTF-8");
+		return jsonView;
 	}
+
+	@Bean(name = "errorJspView")
+	public InternalResourceView internalResourceView() {
+		InternalResourceView jspView = new InternalResourceView("/WEB-INF/views/error.jsp");
+		jspView.setContentType("text/html; charset=UTF-8");
+		return jspView;
+	}
+
+	// @Bean(name = "simpleMappingExceptionResolver")
+	// public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+	// SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
+	//
+	// Properties mappings = new Properties();
+	// mappings.setProperty("DatabaseException", "databaseError");
+	// mappings.setProperty("InvalidCreditCardException", "creditCardError");
+	//
+	// r.setExceptionMappings(mappings);
+	// r.setDefaultErrorView("error");
+	// r.setExceptionAttribute("ex");
+	// r.setWarnLogCategory("example.MvcLogger");
+	// return r;
+	// }
 }

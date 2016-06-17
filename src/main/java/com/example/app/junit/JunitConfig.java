@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring.config.DelegatingWebMvcConfig;
+import com.example.spring.config.WebAppContextConfig;
 import com.example.spring.config.WebMvcConfig;
 
 /**
@@ -18,7 +19,7 @@ import com.example.spring.config.WebMvcConfig;
  */
 @Configuration
 @ComponentScan(basePackages = { "com.example.spring" }, excludeFilters = {
-		@Filter(value = { WebMvcConfig.class, DelegatingWebMvcConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
+		@Filter(value = { WebAppContextConfig.class, WebMvcConfig.class, DelegatingWebMvcConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
 		@Filter(value = { RestController.class, Controller.class }, type = FilterType.ANNOTATION) })
 public class JunitConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JunitConfig.class);
