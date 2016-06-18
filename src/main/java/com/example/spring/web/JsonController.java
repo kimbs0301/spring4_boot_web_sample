@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.spring.common.model.Channel;
 import com.example.spring.common.model.Header;
+import com.example.spring.logic.common.exception.Exceptions;
 import com.example.spring.logic.user.model.User;
 
 /**
@@ -31,9 +32,24 @@ public class JsonController {
 	 * @return
 	 */
 	@RequestMapping(value = "/error", method = RequestMethod.GET, produces = { "application/json" })
-	public String goError() {
-		String s = "";
-		s.substring(0, 10); // exception
+	public String error() {
+		"".substring(0, 10); // exception
+
+		return "error";
+	}
+
+	/**
+	 * curl -v -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/json/common/error.json" | python -m json.tool
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/common/error", method = RequestMethod.GET, produces = { "application/json" })
+	public String commonError() {
+		try {
+			"".substring(0, 10); // exception
+		} catch (Exception e) {
+			throw Exceptions.UNKNOWN_LOGIC;
+		}
 
 		return "error";
 	}

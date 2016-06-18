@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.spring.logic.common.exception.Exceptions;
+
 /**
  * @author gimbyeongsu
  * 
@@ -47,10 +49,41 @@ public class CommonController {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
+				LOGGER.info("");
+				LOGGER.info("");
+				LOGGER.info("shutdown start");
 				System.exit(0);
 			}
 		}).start();
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.NO_CONTENT);
+	}
+	
+	/**
+	 * curl -v "http://localhost:8080/mvc/test/error"
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/test/error", method = RequestMethod.GET)
+	public String testError() {
+		"".substring(0, 10); // exception
+		
+		return "index";
+	}
+	
+	/**
+	 * curl -v "http://localhost:8080/mvc/test/common/error"
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/test/common/error", method = RequestMethod.GET)
+	public String testCommonError() {
+		try {
+			"".substring(0, 10); // exception
+		} catch (Exception e) {
+			throw Exceptions.UNKNOWN_LOGIC;
+		}
+		
+		return "index";
 	}
 }

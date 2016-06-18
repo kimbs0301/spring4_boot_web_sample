@@ -4,11 +4,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>error</title>
-<style type="text/css">H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}.line {height: 1px; background-color: #525D76; border: none;}</style>
+<title></title>
 </head>
 <body>
-<pre>URL : </pre><pre><c:out value="${url}"/></pre>
-<pre>stackTrace : </pre><pre><c:out value="${stackTrace}"/></pre>
+	<pre><b>URL : </b></pre>
+	<pre>
+		<c:out value="${url}" />
+	</pre>
+	<pre><b>errorCode : </b></pre>
+	<pre>
+		<c:out value="${errorCode}" />
+	</pre>
+	<pre><b>errorMsg : </b></pre>
+	<pre>
+		<c:out value="${errorMsg}" />
+	</pre>
+	<pre><b>stackTrace : </b></pre>
+	<pre>
+		<c:out value="${stackTrace}" />
+	</pre>
 </body>
 </html>

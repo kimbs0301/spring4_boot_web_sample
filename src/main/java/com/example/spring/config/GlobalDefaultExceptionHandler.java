@@ -16,7 +16,8 @@ import org.springframework.web.servlet.view.AbstractView;
 import com.example.spring.common.model.Header;
 import com.example.spring.config.model.ExceptionJson;
 import com.example.spring.config.model.ExceptionXml;
-import com.example.spring.logic.util.MimeUtils;
+import com.example.spring.logic.common.exception.CommonException;
+import com.example.spring.logic.common.util.MimeUtils;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 
@@ -56,36 +57,64 @@ class GlobalDefaultExceptionHandler {
 		LOGGER.debug("{}", req.getHeader("accept"));
 		String accept = req.getHeader("accept");
 		if (!Strings.isNullOrEmpty(accept)) {
-			if (MimeUtils.getMimeSet(accept).contains("application/json")) {
-				return jsonModelAndView(req, e);
+			if (MimeUtils.getMimeSet(accept).contains("text/html")) {
+				return defaultModelAndView(req, e, new Header("UNKNOWN", ""));
+			} else if (MimeUtils.getMimeSet(accept).contains("application/json")) {
+				return jsonModelAndView(req, e, new Header("UNKNOWN", ""));
 			} else if (MimeUtils.getMimeSet(accept).contains("application/xml")) {
-				return xmlModelAndView(req, e);
+				return xmlModelAndView(req, e, new Header("UNKNOWN", ""));
 			}
-			return defaultModelAndView(req, e);
+			return defaultModelAndView(req, e, new Header("UNKNOWN", ""));
 		}
-		return defaultModelAndView(req, e);
+		return defaultModelAndView(req, e, new Header("UNKNOWN", ""));
+	}
+	
+	@ExceptionHandler(value = CommonException.class)
+	public ModelAndView commonErrorHandler(HttpServletRequest req, CommonException e) throws Exception {
+		LOGGER.error("{}", e.getMessage());
+		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
+			LOGGER.debug("");
+			// throw e;
+		}
+
+		LOGGER.debug("{}", req.getHeader("accept"));
+		String accept = req.getHeader("accept");
+		if (!Strings.isNullOrEmpty(accept)) {
+			if (MimeUtils.getMimeSet(accept).contains("text/html")) {
+				return defaultModelAndView(req, e, new Header(e.getErrorCode(), e.getErrorMsg()));
+			} else if (MimeUtils.getMimeSet(accept).contains("application/json")) {
+				return jsonModelAndView(req, e, new Header(e.getErrorCode(), e.getErrorMsg()));
+			} else if (MimeUtils.getMimeSet(accept).contains("application/xml")) {
+				return xmlModelAndView(req, e, new Header(e.getErrorCode(), e.getErrorMsg()));
+			}
+			return defaultModelAndView(req, e, new Header(e.getErrorCode(), e.getErrorMsg()));
+		}
+		return defaultModelAndView(req, e, new Header(e.getErrorCode(), e.getErrorMsg()));
 	}
 
-	private ModelAndView jsonModelAndView(HttpServletRequest req, Exception e) {
+	private ModelAndView jsonModelAndView(HttpServletRequest req, Exception e, Header header) {
 		ModelAndView mav = new ModelAndView(jsonView);
-		mav.addObject("header", new Header("UNKNOWN", ""));
+		mav.addObject("header", header);
 		ExceptionJson body = new ExceptionJson(req.getRequestURL().toString(), e);
 		mav.addObject("body", body);
 		return mav;
 	}
 
-	private ModelAndView xmlModelAndView(HttpServletRequest req, Exception e) {
+	private ModelAndView xmlModelAndView(HttpServletRequest req, Exception e, Header header) {
 		ExceptionXml xml = new ExceptionXml();
 		xml.setUrl(req.getRequestURL().toString());
 		xml.setStackTrace(Throwables.getStackTraceAsString(e));
 		ModelAndView mav = new ModelAndView(xmlStringView);
-		mav.addObject("xml", xml);
+		mav.addObject("header", header);
+		mav.addObject("body", xml);
 		return mav;
 	}
 
-	private ModelAndView defaultModelAndView(HttpServletRequest req, Exception e) {
+	private ModelAndView defaultModelAndView(HttpServletRequest req, Exception e, Header header) {
 		ModelAndView mav = new ModelAndView(errorJspView);
 		mav.addObject("url", req.getRequestURL().toString());
+		mav.addObject("errorCode", header.getErrorCode());
+		mav.addObject("errorMsg", header.getErrorMsg());
 		mav.addObject("stackTrace", Throwables.getStackTraceAsString(e));
 		return mav;
 	}

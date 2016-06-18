@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.spring.common.model.Channel;
 import com.example.spring.common.model.Header;
+import com.example.spring.logic.common.exception.Exceptions;
 import com.example.spring.logic.user.model.User;
 
 /**
@@ -35,8 +36,23 @@ public class XmlController {
 	 */
 	@RequestMapping(value = "/error", method = RequestMethod.GET, produces = { "application/xml" })
 	public @ResponseBody List<User> error() {
-		String s = "";
-		s.substring(0, 10); // exception
+		"".substring(0, 10); // exception
+
+		return new ArrayList<>();
+	}
+
+	/**
+	 * curl -v -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml; charset=utf-8" "http://localhost:8080/mvc/xml/common/error.xml" | xmllint --format -
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/common/error", method = RequestMethod.GET, produces = { "application/xml" })
+	public @ResponseBody List<User> commonError() {
+		try {
+			"".substring(0, 10); // exception
+		} catch (Exception e) {
+			throw Exceptions.UNKNOWN_LOGIC;
+		}
 
 		return new ArrayList<>();
 	}

@@ -43,8 +43,9 @@ public class XmlStringView extends AbstractView {
 		OutputStream out = response.getOutputStream();
 		// response.setHeader("Content-Type", "application/xml;charset=utf-8");
 
-		ExceptionXml xml = (ExceptionXml) model.get("xml");
-		Channel channel = new Channel(new Header("UNKNOWN", ""), xml);
+		Header header = (Header) model.get("header");
+		ExceptionXml body = (ExceptionXml) model.get("body");
+		Channel channel = new Channel(header, body);
 		InputStream in = new ByteArrayInputStream(xmlMapper.writeValueAsBytes(channel));
 		try {
 			FileCopyUtils.copy(in, out);

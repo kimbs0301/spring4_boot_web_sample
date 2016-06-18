@@ -1,4 +1,4 @@
-package com.example.spring.logic.util;
+package com.example.spring.logic.common.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,7 +38,7 @@ public class MimeUtils {
 		}
 		return result;
 	}
-	
+
 	public static Set<String> getMimeSet(String s) {
 		Set<String> result = new HashSet<>();
 		List<String> mimeList = Splitter.on(CharMatcher.anyOf(",;)")).trimResults().omitEmptyStrings().splitToList(s);
