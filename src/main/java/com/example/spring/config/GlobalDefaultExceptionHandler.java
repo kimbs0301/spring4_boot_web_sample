@@ -8,11 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 
+import com.example.spring.common.model.Header;
+import com.example.spring.config.model.ExceptionJson;
+import com.example.spring.config.model.ExceptionXml;
 import com.example.spring.logic.util.MimeUtils;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -37,13 +42,17 @@ class GlobalDefaultExceptionHandler {
 	@Autowired
 	private AbstractView errorJspView;
 
+	public GlobalDefaultExceptionHandler() {
+		LOGGER.debug("생성자 GlobalDefaultExceptionHandler()");
+	}
+
 	@ExceptionHandler(value = Exception.class)
 	public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 		LOGGER.error("{}", e.getMessage());
-		// if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
-		// LOGGER.error("");
-		// throw e;
-		// }
+		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
+			LOGGER.debug("");
+			// throw e;
+		}
 
 		LOGGER.debug("{}", req.getHeader("accept"));
 		String accept = req.getHeader("accept");
@@ -60,33 +69,24 @@ class GlobalDefaultExceptionHandler {
 
 	private ModelAndView jsonModelAndView(HttpServletRequest req, Exception e) {
 		ModelAndView mav = new ModelAndView(jsonView);
-		mav.addObject("url", req.getRequestURL());
-		mav.addObject("stackTrace", e);
+		mav.addObject("header", new Header("UNKNOWN", ""));
+		ExceptionJson body = new ExceptionJson(req.getRequestURL().toString(), e);
+		mav.addObject("body", body);
 		return mav;
 	}
 
-	// private ModelAndView xmlModelAndView(HttpServletRequest req, Exception e) {
-	// ModelMap modelMap = new ModelMap();
-	// XmlModel data = new XmlModel();
-	// data.setReqUrl(req.getRequestURL().toString());
-	// data.setStackTrace(Throwables.getStackTraceAsString(e));
-	// modelMap.put("", data);
-	// return new ModelAndView(xmlView, modelMap);
-	// }
-
 	private ModelAndView xmlModelAndView(HttpServletRequest req, Exception e) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		sb.append("<data>aaa</data>");
+		ExceptionXml xml = new ExceptionXml();
+		xml.setUrl(req.getRequestURL().toString());
+		xml.setStackTrace(Throwables.getStackTraceAsString(e));
 		ModelAndView mav = new ModelAndView(xmlStringView);
-		mav.addObject(sb.toString());
-		mav.addObject("xml", sb.toString());
+		mav.addObject("xml", xml);
 		return mav;
 	}
 
 	private ModelAndView defaultModelAndView(HttpServletRequest req, Exception e) {
 		ModelAndView mav = new ModelAndView(errorJspView);
-		mav.addObject("url", req.getRequestURL());
+		mav.addObject("url", req.getRequestURL().toString());
 		mav.addObject("stackTrace", Throwables.getStackTraceAsString(e));
 		return mav;
 	}

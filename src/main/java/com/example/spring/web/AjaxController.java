@@ -65,35 +65,6 @@ public class AjaxController {
 		}
 		return result;
 	}
-	
-	@RequestMapping(value = "/error", method = RequestMethod.GET)
-	public String goError() {
-		String s = "";
-		s.substring(0, 10); // exception
-		
-		return "error";
-	}
-	
-	@RequestMapping(value="/error/xml", method = RequestMethod.GET, produces={"application/xml"})
-    public @ResponseBody List<User> xml() {
-		String s = "";
-		s.substring(0, 10); // exception
-        return users;
-    }
-	
-	@RequestMapping(value="/xmldata", method = RequestMethod.POST, produces={"application/xml"})
-    public @ResponseBody List<User> xml(@RequestBody User u) {
-		List<User> users = new ArrayList<>();
-		User user = new User();
-		user.setId(11);
-		user.setAddress("aaa");
-		user.setEmail("bbb");
-		user.setPassword("a");
-		user.setPhone("123");
-		user.setUsername("b");
-		users.add(user);
-        return users;
-    }
 
 	private boolean isValidSearchCriteria(SearchCriteria search) {
 		boolean valid = true;

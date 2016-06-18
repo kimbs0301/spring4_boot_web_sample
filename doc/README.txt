@@ -31,17 +31,17 @@ curl -v -H "Accept: application/json" "http://localhost:8080/mvc/account/member/
 
 http://localhost:8080/mvc/ajax/searchCriteria
 
-http://localhost:8080/mvc/ajax/error
-
 curl -v -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" "http://localhost:8080/mvc/ajax/error" | python -m json.tool
-
-curl -v -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml; charset=utf-8" "http://localhost:8080/mvc/ajax/error/xml.xml"
-
-curl -v -X POST  -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/ajax/xmldata.xml"
 
 http://localhost:8080/mvc/file/uploadForm
 
 curl -v -X POST -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" -d '{"id":111,"name":"KKK"}' "http://localhost:8080/mvc/member/register.json"
+
+
+error test
+curl -v -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/json/error.json" | python -m json.tool
+curl -v -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml; charset=utf-8" "http://localhost:8080/mvc/xml/error.xml" | xmllint --format -
+curl -v -X POST  -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/xml/data.xml" | xmllint --format -
 
 
 

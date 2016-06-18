@@ -34,6 +34,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.spring.config.interceptor.CommonInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration
@@ -46,6 +47,8 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private XmlMapper xmlMapper;
 	@Autowired
 	private CommonInterceptor commonInterceptor;
 
@@ -167,7 +170,7 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	public MappingJackson2XmlHttpMessageConverter mappingJackson2XmlHttpMessageConverter() {
-		MappingJackson2XmlHttpMessageConverter converter = new MappingJackson2XmlHttpMessageConverter();
+		MappingJackson2XmlHttpMessageConverter converter = new MappingJackson2XmlHttpMessageConverter(xmlMapper);
 		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		MimeType type = MimeTypeUtils.parseMimeType("application/xml");
 		supportedMediaTypes.add(new MediaType(type.getType(), type.getSubtype(), Charset.forName("UTF-8")));

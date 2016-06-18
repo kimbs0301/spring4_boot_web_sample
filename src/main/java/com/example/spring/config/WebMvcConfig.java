@@ -13,7 +13,6 @@ import org.springframework.boot.context.web.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -42,6 +41,8 @@ public class WebMvcConfig {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private XmlMapper xmlMapper;
 
 	public WebMvcConfig() {
 		LOGGER.debug("생성자 WebMvcConfig()");
@@ -133,10 +134,8 @@ public class WebMvcConfig {
 	}
 
 	@Bean(name = "xmlView")
-	public MappingJackson2XmlView MappingJackson2XmlView() {
-		XmlMapper xmlMapper = Jackson2ObjectMapperBuilder.xml().build();
+	public MappingJackson2XmlView mappingJackson2XmlView() {
 		MappingJackson2XmlView xmlView = new MappingJackson2XmlView(xmlMapper);
-		xmlView.setExposePathVariables(true);
 		xmlView.setContentType("application/xml; charset=UTF-8");
 		return xmlView;
 	}

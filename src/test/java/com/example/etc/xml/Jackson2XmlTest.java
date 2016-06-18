@@ -151,10 +151,41 @@ public class Jackson2XmlTest {
 		JacksonXmlModule module = new JacksonXmlModule();
 		module.setDefaultUseWrapper(false);
 		XmlMapper mapper = new XmlMapper(factory, module);
+
+		String xml = mapper.writeValueAsString(new NamespaceTest());
+		LOGGER.debug("{}", xml);
+	}
+	
+	@Test
+	public void test_writeValueAsString_version_1_0() throws Exception {
+		XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+		// xmlInputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
+		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+		// xmlOutputFactory.setProperty(name, value);
+		XmlFactory factory = new XmlFactory(xmlInputFactory, xmlOutputFactory);
+		JacksonXmlModule module = new JacksonXmlModule();
+		module.setDefaultUseWrapper(false);
+		XmlMapper mapper = new XmlMapper(factory, module);
+		mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+
+		String xml = mapper.writeValueAsString(new Simple());
+		LOGGER.debug("{}", xml);
+	}
+	
+	@Test
+	public void test_writeValueAsString_version_1_1() throws Exception {
+		XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+		// xmlInputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
+		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+		// xmlOutputFactory.setProperty(name, value);
+		XmlFactory factory = new XmlFactory(xmlInputFactory, xmlOutputFactory);
+		JacksonXmlModule module = new JacksonXmlModule();
+		module.setDefaultUseWrapper(false);
+		XmlMapper mapper = new XmlMapper(factory, module);
 		mapper.configure(ToXmlGenerator.Feature.WRITE_XML_1_1, true);
 		mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
 
-		String xml = mapper.writeValueAsString(new NamespaceTest());
+		String xml = mapper.writeValueAsString(new Simple());
 		LOGGER.debug("{}", xml);
 	}
 
