@@ -50,6 +50,12 @@ public class FileController {
 		// fileUploadPath = environment.getRequiredProperty("file.upload.path");
 	}
 
+	/**
+	 * http://localhost:8080/mvc/file/111.txt/download
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/{file}/download", method = RequestMethod.GET)
 	public ModelAndView download(@PathVariable("file") String file) {
 		LOGGER.debug("");
@@ -60,6 +66,12 @@ public class FileController {
 		return mav;
 	}
 
+	/**
+	 * http://localhost:8080/mvc/file/uploadForm
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/uploadForm", method = RequestMethod.GET)
 	public String uploadForm(Model model) {
 		File rootFolder = new File(fileUploadPath);
@@ -74,7 +86,7 @@ public class FileController {
 						.map(f -> f.getName()).collect(Collectors.toList()));
 		return "uploadForm";
 	}
-	
+
 	@RequestMapping(value = "/downloadForm", method = RequestMethod.GET)
 	public String downloadForm(Model model) {
 		return "downloadForm";

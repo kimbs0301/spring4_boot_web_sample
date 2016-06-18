@@ -57,7 +57,7 @@ public class Jackson2XmlTest {
 		JacksonXmlModule module = new JacksonXmlModule();
 		module.setDefaultUseWrapper(false);
 		XmlMapper mapper = new XmlMapper(module);
-		Simple value = mapper.readValue("<Simple><x>1</x><y>2</y></Simple>", Simple.class);
+		Simple value = mapper.readValue("<Simple><x>1</x><date>1466230353071</date></Simple>", Simple.class);
 		LOGGER.debug("{}", value);
 	}
 

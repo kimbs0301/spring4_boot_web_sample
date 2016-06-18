@@ -20,14 +20,20 @@ import com.example.spring.logic.member.service.MemberService;
 @RequestMapping("/member")
 public class MemberController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
-	
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	public MemberController() {
 		LOGGER.debug("생성자 MemberController()");
 	}
-	
+
+	/**
+	 * curl -v -X POST -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" -d '{"id":111,"name":"KKK"}' "http://localhost:8080/mvc/member/register.json"
+	 * 
+	 * @param member
+	 * @return
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public @ResponseBody Member register(@RequestBody Member member) {
 		memberService.register(member);

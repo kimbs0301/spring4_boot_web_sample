@@ -28,6 +28,11 @@ public class XmlController {
 		LOGGER.debug("생성자 XmlController()");
 	}
 
+	/**
+	 * curl -v -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml; charset=utf-8" "http://localhost:8080/mvc/xml/error.xml" | xmllint --format -
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/error", method = RequestMethod.GET, produces = { "application/xml" })
 	public @ResponseBody List<User> error() {
 		String s = "";
@@ -36,10 +41,16 @@ public class XmlController {
 		return new ArrayList<>();
 	}
 
+	/**
+	 * curl -v -X POST -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/xml/data.xml" | xmllint --format -
+	 * 
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping(value = "/data", method = RequestMethod.POST, produces = { "application/xml" })
 	public @ResponseBody Channel data(@RequestBody User req) {
-		Channel channel = new Channel(new Header("OK",""));
-		
+		Channel channel = new Channel(new Header("OK", ""));
+
 		List<User> users = new ArrayList<>();
 		User user = new User();
 		user.setId(11);
@@ -49,7 +60,7 @@ public class XmlController {
 		user.setPhone("123");
 		user.setUsername("b");
 		users.add(user);
-		
+
 		channel.setBody(users);
 		return channel;
 	}

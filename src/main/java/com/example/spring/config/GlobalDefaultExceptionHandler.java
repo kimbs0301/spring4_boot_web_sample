@@ -1,13 +1,11 @@
 package com.example.spring.config;
 
-import java.util.List;
-
-import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,12 +27,13 @@ import com.google.common.base.Throwables;
  * 
  * @author gimbyeongsu
  */
+@Profile({ "local", "svc" })
 @ControllerAdvice
 class GlobalDefaultExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 
-	@Autowired
-	private List<AbstractView> views;
+	// @Autowired
+	// private List<AbstractView> views;
 	@Autowired
 	private AbstractView jsonView;
 	@Autowired
@@ -91,10 +90,10 @@ class GlobalDefaultExceptionHandler {
 		return mav;
 	}
 
-	@PreDestroy
-	public void destroy() {
-		for (AbstractView each : views) {
-			LOGGER.debug("{} {}", each, each.getContentType());
-		}
-	}
+	// @PreDestroy
+	// public void destroy() {
+	// for (AbstractView each : views) {
+	// LOGGER.debug("{} {}", each, each.getContentType());
+	// }
+	// }
 }

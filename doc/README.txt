@@ -25,26 +25,18 @@ git add -A
 git commit -a -m "ok"
 git push
 
-curl -v "http://localhost:8080/mvc/"
 
-curl -v -H "Accept: application/json" "http://localhost:8080/mvc/account/member/11.json"
+for ((i=1;i<=100000;i++)); do curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" -d '{"id":1,"username":"KKK"}' "http://localhost:8080/mvc/json/data.json"; echo "
+"; done
 
-http://localhost:8080/mvc/ajax/searchCriteria
-
-curl -v -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" "http://localhost:8080/mvc/ajax/error" | python -m json.tool
-
-http://localhost:8080/mvc/file/uploadForm
-
-curl -v -X POST -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json" -d '{"id":111,"name":"KKK"}' "http://localhost:8080/mvc/member/register.json"
-
-
-error test
-curl -v -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/json/error.json" | python -m json.tool
-curl -v -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml; charset=utf-8" "http://localhost:8080/mvc/xml/error.xml" | xmllint --format -
-curl -v -X POST  -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/xml/data.xml" | xmllint --format -
+for ((i=1;i<=100000;i++)); do curl -X POST -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/xml/data.xml"; echo "
+"; done
 
 
 
+
+
+참고 URL :
 http://peyton.tk/index.php/post/20
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples
 https://blog.outsider.ne.kr/882

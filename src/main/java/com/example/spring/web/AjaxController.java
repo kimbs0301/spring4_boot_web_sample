@@ -39,7 +39,13 @@ public class AjaxController {
 		User user1 = new User("kimbs", "123456", "kimbs0301@gamil.com", "123-1234-1234", "address 123");
 		users.add(user1);
 	}
-	
+
+	/**
+	 * http://localhost:8080/mvc/ajax/searchCriteria
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/searchCriteria", method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
 		return "ajax";

@@ -11,7 +11,7 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.valves.AccessLogValve;
-import org.apache.coyote.http11.Http11Nio2Protocol;
+import org.apache.coyote.http11.Http11NioProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class EmbeddedTomcatConfig {
 		String contextPath = environment.getRequiredProperty("context.path");
 		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(contextPath, port);
 
-		factory.setBaseProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
+		factory.setBaseProtocol("org.apache.coyote.http11.Http11NioProtocol");
 		// MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
 		MimeMappings mappings = new MimeMappings();
 		mappings.add("html", "text/html;charset=UTF-8");
@@ -98,10 +98,17 @@ public class EmbeddedTomcatConfig {
 				connector.setURIEncoding("UTF-8");
 				connector.setXpoweredBy(false);
 				
+				connector.setProperty("acceptCount", "30");
+				connector.setProperty("acceptorThreadCount", "1");
+				connector.setProperty("acceptorThreadPriority", "5");
+				connector.setProperty("maxHttpHeaderSize", "1024");
+				connector.setProperty("pollerThreadCount", "10");
+				connector.setProperty("pollerThreadPriority", "5");
 				connector.setProperty("maxProcessors", "150");
 				connector.setProperty("maxThreads", "150");
 				connector.setProperty("minSpareThreads", "150");
 				connector.setProperty("maxSpareThreads", "150");
+				
 				connector.setProperty("socket.directBuffer", "true");
 				connector.setProperty("socket.rxBufSize", "25188");
 				connector.setProperty("socket.txBufSize", "43800");
@@ -114,7 +121,7 @@ public class EmbeddedTomcatConfig {
 				connector.setProperty("socket.eventCache", "500");
 				connector.setProperty("socket.tcpNoDelay", "true");
 				connector.setProperty("socket.soKeepAlive", "false");
-				connector.setProperty("acceptCount", "30");
+				
 				connector.setProperty("connectionTimeout", "3000");
 				// connector.setProperty("connectionLinger", "0");
 				connector.setProperty("socket.soTimeout", "5000");
@@ -134,17 +141,24 @@ public class EmbeddedTomcatConfig {
 	}
 	
 	private Connector createSslConnector() {
-		Connector connector = new Connector("org.apache.coyote.http11.Http11Nio2Protocol");
+		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setURIEncoding("UTF-8");
 		connector.setScheme("https");
 		connector.setSecure(true);
 		connector.setPort(8443);
 		connector.setEnableLookups(false);
 		
-		connector.setProperty("maxProcessors", "10");
+		connector.setProperty("acceptCount", "10");
+		connector.setProperty("acceptorThreadCount", "1");
+		connector.setProperty("acceptorThreadPriority", "5");
+		connector.setProperty("maxHttpHeaderSize", "1024");
+		connector.setProperty("pollerThreadCount", "2");
+		connector.setProperty("pollerThreadPriority", "5");
+		connector.setProperty("maxProcessors", "20");
 		connector.setProperty("maxThreads", "10");
 		connector.setProperty("minSpareThreads", "10");
 		connector.setProperty("maxSpareThreads", "10");
+		
 		connector.setProperty("socket.directBuffer", "true");
 		connector.setProperty("socket.rxBufSize", "25188");
 		connector.setProperty("socket.txBufSize", "43800");
@@ -157,13 +171,12 @@ public class EmbeddedTomcatConfig {
 		connector.setProperty("socket.eventCache", "500");
 		connector.setProperty("socket.tcpNoDelay", "true");
 		connector.setProperty("socket.soKeepAlive", "false");
-		connector.setProperty("acceptCount", "10");
 		connector.setProperty("connectionTimeout", "3000");
 		// connector.setProperty("connectionLinger", "0");
 		connector.setProperty("socket.soTimeout", "5000");
 		connector.setProperty("useComet", "false");
 		
-		Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
+		Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
 		File keystore = new File("file/ssl/tomcat.jks");
 		File truststore = new File("file/ssl/truststore.jks");
 		protocol.setSSLEnabled(true);
