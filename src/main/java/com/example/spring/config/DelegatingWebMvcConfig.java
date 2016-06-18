@@ -1,5 +1,6 @@
 package com.example.spring.config;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,9 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -37,14 +41,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingWebMvcConfig.class);
-	
+
 	private final WebMvcConfigComposite configurers = new WebMvcConfigComposite();
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 	@Autowired
 	private CommonInterceptor commonInterceptor;
-	
+
 	public DelegatingWebMvcConfig() {
 		LOGGER.debug("생성자 DelegatingWebMvcConfig()");
 	}
@@ -58,7 +62,6 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 		this.configurers.addWebMvcConfigurers(configurers);
 	}
 
-
 	@Override
 	protected void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(commonInterceptor).addPathPatterns("/**");
@@ -68,9 +71,10 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		configurer.ignoreAcceptHeader(true) //
-		.defaultContentType(MediaType.TEXT_HTML) //
-		.mediaType("html", MediaType.TEXT_HTML) //
-		.mediaType("json", MediaType.APPLICATION_JSON);
+				.defaultContentType(MediaType.TEXT_HTML) //
+				.mediaType("html", MediaType.TEXT_HTML) //
+				.mediaType("xml", MediaType.APPLICATION_XML) //
+				.mediaType("json", MediaType.APPLICATION_JSON);
 		this.configurers.configureContentNegotiation(configurer);
 	}
 
@@ -97,7 +101,7 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-		
+
 		this.configurers.addResourceHandlers(registry);
 	}
 
@@ -119,6 +123,7 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(mappingJackson2HttpMessageConverter());
+		converters.add(mappingJackson2XmlHttpMessageConverter());
 		this.configurers.configureMessageConverters(converters);
 	}
 
@@ -157,6 +162,15 @@ public class DelegatingWebMvcConfig extends WebMvcConfigurationSupport {
 		converter.setObjectMapper(objectMapper);
 		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+		converter.setSupportedMediaTypes(supportedMediaTypes);
+		return converter;
+	}
+
+	public MappingJackson2XmlHttpMessageConverter mappingJackson2XmlHttpMessageConverter() {
+		MappingJackson2XmlHttpMessageConverter converter = new MappingJackson2XmlHttpMessageConverter();
+		List<MediaType> supportedMediaTypes = new ArrayList<>();
+		MimeType type = MimeTypeUtils.parseMimeType("application/xml");
+		supportedMediaTypes.add(new MediaType(type.getType(), type.getSubtype(), Charset.forName("UTF-8")));
 		converter.setSupportedMediaTypes(supportedMediaTypes);
 		return converter;
 	}

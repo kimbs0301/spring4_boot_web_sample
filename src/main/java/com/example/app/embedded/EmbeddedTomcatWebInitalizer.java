@@ -10,8 +10,6 @@ import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.example.spring.config.WebAppContextConfig;
-
 /**
  * @author gimbyeongsu
  * 
@@ -27,7 +25,7 @@ public class EmbeddedTomcatWebInitalizer implements ServletContextInitializer {
 	public void onStartup(ServletContext container) throws ServletException {
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
-		context.register(WebAppContextConfig.class);
+		context.register(com.example.spring.config.WebAppContextConfig.class);
 		context.setServletContext(container);
 
 		DispatcherServlet dispatcher = new DispatcherServlet(context);

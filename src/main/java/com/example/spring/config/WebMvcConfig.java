@@ -13,20 +13,23 @@ import org.springframework.boot.context.web.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.xml.MappingJackson2XmlView;
 
 import com.example.spring.config.filter.CommonFilter;
 import com.example.spring.config.viewresolver.JsonViewResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * @author gimbyeongsu
@@ -127,6 +130,15 @@ public class WebMvcConfig {
 		MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
 		jsonView.setContentType("application/json; charset=UTF-8");
 		return jsonView;
+	}
+
+	@Bean(name = "xmlView")
+	public MappingJackson2XmlView MappingJackson2XmlView() {
+		XmlMapper xmlMapper = Jackson2ObjectMapperBuilder.xml().build();
+		MappingJackson2XmlView xmlView = new MappingJackson2XmlView(xmlMapper);
+		xmlView.setExposePathVariables(true);
+		xmlView.setContentType("application/xml; charset=UTF-8");
+		return xmlView;
 	}
 
 	@Bean(name = "errorJspView")

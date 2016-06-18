@@ -28,10 +28,10 @@ import com.example.spring.logic.account.service.AccountService;
 @Transactional
 public class AccountServiceImplTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImplTest.class);
-	
+
 	@Autowired
 	private AccountService accountService;
-	
+
 	@Test
 	@Rollback(true)
 	public void test2() throws Exception {

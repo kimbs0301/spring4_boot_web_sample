@@ -1,9 +1,13 @@
 package com.example.spring.logic.user.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author gimbyeongsu
  * 
  */
+@XmlRootElement
 public class User {
 	private int id;
 	private String username;
@@ -23,6 +27,7 @@ public class User {
 		this.address = address;
 	}
 
+	@XmlAttribute
 	public int getId() {
 		return id;
 	}
@@ -31,14 +36,17 @@ public class User {
 		this.id = id;
 	}
 
+	@XmlAttribute
 	public String getUsername() {
 		return username;
 	}
 
+	@XmlAttribute
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	@XmlAttribute
 	public String getPassword() {
 		return password;
 	}
@@ -47,6 +55,7 @@ public class User {
 		this.password = password;
 	}
 
+	@XmlAttribute
 	public String getEmail() {
 		return email;
 	}
@@ -55,6 +64,7 @@ public class User {
 		this.email = email;
 	}
 
+	@XmlAttribute
 	public String getPhone() {
 		return phone;
 	}
@@ -63,6 +73,7 @@ public class User {
 		this.phone = phone;
 	}
 
+	@XmlAttribute
 	public String getAddress() {
 		return address;
 	}
