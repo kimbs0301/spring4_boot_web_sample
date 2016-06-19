@@ -51,7 +51,8 @@ public class FileController {
 	}
 
 	/**
-	 * http://localhost:8080/mvc/file/111.txt/download
+	 * curl -o a.txt "http://localhost:8080/mvc/file/a.txt/download"
+	 * http://localhost:8080/mvc/file/a.txt/download
 	 * 
 	 * @param model
 	 * @return

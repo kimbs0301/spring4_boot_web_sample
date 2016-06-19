@@ -94,6 +94,7 @@ public class EmbeddedTomcatConfig {
 
 			@Override
 			public void customize(Connector connector) {
+				// https://tomcat.apache.org/tomcat-8.0-doc/config/http.html
 				connector.setEnableLookups(false);
 				connector.setURIEncoding("UTF-8");
 				connector.setXpoweredBy(false);

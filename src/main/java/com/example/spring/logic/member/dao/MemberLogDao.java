@@ -1,20 +1,15 @@
-package com.example.spring.logic.member.service;
+package com.example.spring.logic.member.dao;
 
 import java.util.List;
 
-import com.example.spring.logic.member.model.Member;
 import com.example.spring.logic.member.model.MemberLog;
 
 /**
  * @author gimbyeongsu
  * 
  */
-public interface MemberService {
-	public void test();
-	
-	public void register(Member member);
-	
+public interface MemberLogDao {
 	public void insert(MemberLog memberLog);
-	
+
 	public void insert(List<MemberLog> memberLogs);
 }

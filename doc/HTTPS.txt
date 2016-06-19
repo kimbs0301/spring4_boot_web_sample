@@ -1,0 +1,160 @@
+http://www.programering.com/a/MTMygTMwATQ.html
+
+$ openssl version
+OpenSSL 0.9.8zh 14 Jan 2016
+
+
+1. CA certificate
+$ cd /temp
+$ mkdir demoCA
+Create the CA private key
+$ openssl genrsa -des3 -out demoCA/ca.key 1024
+Create a CA certificate
+$ openssl req -new -x509 -key demoCA/ca.key -out demoCA/ca.crt -days 365
+
+
+1. server terminal
+$ mkdir server
+Create the server end of the private key
+$ openssl genrsa -des3 -out server/server.key 1024
+Create a server certificate signing request
+$ openssl req -new -key server/server.key -out server/server.csr
+CA signed the server certificate
+$ openssl x509 -req -days 30 -in server/server.csr -CA demoCA/ca.crt -CAkey demoCA/ca.key -CAcreateserial -out server/server.crt
+Create the server end of the pkcs12 file
+$ openssl pkcs12 -export -in server/server.crt -inkey server/server.key -out server/server.p12 -name tomcat_server
+
+
+Convert pkcs12 to JKS keystore file
+$ keytool -importkeystore -v -srckeystore server/server.p12 -srcstoretype pkcs12 -srcstorepass 123456 -destkeystore tomcat.jks -deststoretype jks -deststorepass 123456
+
+
+3. client terminal
+$ mkdir client
+Create the client end of the private key
+$ openssl req -new -newkey rsa:1024-nodes  -out client/client.req -keyout client/client.key
+Create a client end certificate signing request
+$ openssl x509 -CA demoCA/ca.crt -CAkey demoCA/ca.key -CAserial demoCA/ca.srl -req -in client/client.req -out client/client.pem -days 365
+Create the client end of the pkcs12 file
+$ openssl pkcs12 -export -clcerts -in client/client.pem -inkey client/client.key -out client/client.p12 -name tomcat_client
+Create the client end of the JKS file
+$ keytool -importkeystore -v  -srckeystore client/client.p12 -srcstoretype pkcs12 -srcstorepass 123456 -destkeystore client.jks -deststoretype jks -deststorepass 123456
+
+
+4. To create the trust key database
+$ keytool -genkey -alias dummy -keyalg RSA -keystore truststore.jks
+The CA certified the certificate import Trust Bank
+$ keytool -import -v -trustcacerts -alias my_ca -file demoCA/ca.crt -keystore truststore.jks
+$ cd /temp
+$ cp tomcat.jks /workspace/luna/spring_boot_example/src/main/resources/
+$ cp truststore.jks /workspace/luna/spring_boot_example/src/main/resources/
+
+
+
+sudo tcpdump -nnvvXSs 8000 -ilo0 host localhost and port 8443
+sudo tcpdump -nnvvXSs 8000 -ilo0 host localhost and port 8080
+
+
+private Connector createSslConnector() {
+	Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+	Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
+	try {
+		File keystore = new ClassPathResource("tomcat.jks").getFile();
+		File truststore = new ClassPathResource("truststore.jks").getFile();
+		connector.setScheme("https");
+		connector.setSecure(true);
+		connector.setPort(8443);
+		protocol.setSSLEnabled(true);
+		protocol.setKeystoreFile(keystore.getAbsolutePath());
+		protocol.setKeystorePass("123456");
+		protocol.setTruststoreFile(truststore.getAbsolutePath());
+		protocol.setTruststorePass("123456");
+		protocol.setClientAuth("false");
+		protocol.setKeyAlias("tomcat_server");
+		protocol.setSslProtocol("TLS");
+		return connector;
+	} catch (IOException ex) {
+		throw new IllegalStateException("can't access keystore: [" + "keystore" + "] or truststore: [" + "keystore"
+				+ "]", ex);
+	}
+}
+	
+	
+import java.io.IOException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * @author gimbyeongsu
+ * 
+ */
+public class HttpsTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(HttpsTest.class);
+
+	@Test
+	public void test_ssl() throws Exception {
+		SSLContext sslcontext = SSLContext.getInstance("TLS");
+		X509TrustManager tm = new X509TrustManager() {
+			@Override
+			public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+			}
+
+			@Override
+			public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+			}
+
+			@Override
+			public X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+		};
+		sslcontext.init(null, new TrustManager[] { tm }, null);
+		SSLSocketFactory socketFactory = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		//
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		Scheme https = new Scheme("https", 8443, socketFactory);
+		httpclient.getConnectionManager().getSchemeRegistry().register(https);
+		HttpRequestInterceptor postHttpRequestInterceptor = new HttpRequestInterceptor() {
+			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+				request.setHeader(HTTP.USER_AGENT, "httpclient_4.1.3");
+				request.setHeader(HTTP.CONTENT_TYPE, "application/json");
+				request.setHeader("Accept", "application/json");
+				request.setHeader("Cache-Control", "no-cache");
+			}
+		};
+		httpclient.addRequestInterceptor(postHttpRequestInterceptor);
+
+		HttpGet httpget = new HttpGet("https://localhost:8443/mvc/members/member/11.json");
+		LOGGER.debug("executing request:{}", httpget.getRequestLine());
+		HttpResponse response = httpclient.execute(httpget);
+		HttpEntity entity = response.getEntity();
+		LOGGER.debug("----------------------------------");
+		LOGGER.debug("{}", response.getStatusLine());
+		if (entity != null) {
+			LOGGER.debug("Response content length:{}", entity.getContentLength());
+			LOGGER.debug("{}", IOUtils.toString(entity.getContent(), "UTF-8"));
+		}
+		EntityUtils.consume(entity);
+	}
+}
