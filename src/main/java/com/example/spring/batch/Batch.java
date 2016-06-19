@@ -11,7 +11,7 @@ public interface Batch extends Runnable {
 
 	public boolean isInProgress();
 
-	public void setShutdownEnabled();
+	public void shutdownEnabled();
 	
 	public boolean isEnabled();
 }

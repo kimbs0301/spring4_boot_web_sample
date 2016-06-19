@@ -40,7 +40,7 @@ public class TestBatch implements Batch {
 	}
 
 	@Override
-	public void setShutdownEnabled() {
+	public void shutdownEnabled() {
 		shutdown = true;
 	}
 

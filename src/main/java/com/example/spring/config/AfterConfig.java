@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 
@@ -22,6 +23,7 @@ import com.example.spring.batch.Batch;
  * @author gimbyeongsu
  * 
  */
+@Profile({ "local", "svc" })
 @Configuration
 @DependsOn(value = { "rootConfig", "jdbcConfig", "cacheConfig", "schedulingConfig", "delegatingWebMvcConfig",
 		"webMvcConfig" })
@@ -54,7 +56,7 @@ public class AfterConfig {
 		while (true) {
 			Map<String, Boolean> map = new HashMap<>();
 			for (Batch task : batchs) {
-				task.setShutdownEnabled();
+				task.shutdownEnabled();
 				map.put(task.getName(), task.isInProgress());
 			}
 			List<Integer> doneList = new ArrayList<>();

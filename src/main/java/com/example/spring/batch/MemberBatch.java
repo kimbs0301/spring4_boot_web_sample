@@ -44,7 +44,7 @@ public class MemberBatch implements Batch {
 	}
 
 	@Override
-	public void setShutdownEnabled() {
+	public void shutdownEnabled() {
 		shutdown = true;
 	}
 
