@@ -1,15 +1,17 @@
-package com.example.spring.config;
+package com.example.spring.config.redis;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.junit.JunitConfig;
 
@@ -22,14 +24,22 @@ import com.example.app.junit.JunitConfig;
 @WebAppConfiguration
 @ActiveProfiles(profiles = { "junit" })
 @TestPropertySource(locations = "classpath:application-junit.properties")
-@Transactional
-public class JdbcConfigTest {
-	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcConfigTest.class);
+public class ShardRedisTemplateRollbackTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShardRedisTemplateRollbackTest.class);
 
-	// private ShardRedisTemplateRollback ShardRedisTemplateRollback;
-	
+	@Qualifier("shardRedisTemplate")
+	@Autowired
+	private AbstractJedisTemplate redisTemplate;
+
+	@After
+	public void afterRedisRollback() {
+		((AbstractJedisTemplateRollback) redisTemplate).deleteKeyList();
+	}
+
 	@Test
-	public void test() throws Exception {
-		LOGGER.debug("");
+	public void test_set() throws Exception {
+		redisTemplate.set("KKK", "111");
+		String value = redisTemplate.get("KKK");
+		LOGGER.debug("{}", value);
 	}
 }

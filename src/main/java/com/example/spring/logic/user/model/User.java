@@ -1,6 +1,5 @@
 package com.example.spring.logic.user.model;
 
-
 /**
  * @author gimbyeongsu
  * 

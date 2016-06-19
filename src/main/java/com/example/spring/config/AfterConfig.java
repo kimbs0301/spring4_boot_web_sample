@@ -25,8 +25,8 @@ import com.example.spring.batch.Batch;
  */
 @Profile({ "local", "svc" })
 @Configuration
-@DependsOn(value = { "rootConfig", "jdbcConfig", "cacheConfig", "schedulingConfig", "delegatingWebMvcConfig",
-		"webMvcConfig" })
+@DependsOn(value = { "rootConfig", "jdbcConfig", "redisConfig", "cacheConfig", "schedulingConfig",
+		"delegatingWebMvcConfig", "webMvcConfig" })
 public class AfterConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AfterConfig.class);
 

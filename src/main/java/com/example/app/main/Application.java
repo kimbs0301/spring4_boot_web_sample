@@ -17,7 +17,9 @@ import com.example.spring.config.WebAppContextConfig;
  * 
  */
 @Configurable
-@ComponentScan(basePackages = { "com.example.spring" }, basePackageClasses = { EmbeddedTomcatConfig.class }, excludeFilters = @Filter(value = { WebAppContextConfig.class }, type = FilterType.ASSIGNABLE_TYPE))
+@ComponentScan(basePackages = { "com.example.spring" }, basePackageClasses = { EmbeddedTomcatConfig.class }, excludeFilters = {
+		@Filter(value = { WebAppContextConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
+		@Filter(pattern = { "com.example.spring.*.model.*" }, type = FilterType.REGEX) })
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

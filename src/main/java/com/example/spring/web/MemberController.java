@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.spring.common.model.Channel;
+import com.example.spring.common.model.Header;
 import com.example.spring.logic.member.model.Member;
 import com.example.spring.logic.member.service.MemberService;
 
@@ -35,8 +37,10 @@ public class MemberController {
 	 * @return
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public @ResponseBody Member register(@RequestBody Member member) {
+	public @ResponseBody Channel register(@RequestBody Member member) {
 		memberService.register(member);
-		return member;
+		Channel channel = new Channel(new Header("OK", ""));
+		channel.setBody(member);
+		return channel;
 	}
 }
