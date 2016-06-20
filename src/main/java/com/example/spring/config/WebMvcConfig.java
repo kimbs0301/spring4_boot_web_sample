@@ -34,8 +34,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  * @author gimbyeongsu
  * 
  */
-@DependsOn(value = { "rootConfig" })
 @Configuration
+@DependsOn(value = { "rootConfig" })
 public class WebMvcConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfig.class);
 

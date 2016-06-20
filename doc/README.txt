@@ -11,6 +11,8 @@ mvn clean install -DskipTests
 
 mvn install -DskipTests
 
+mvn dependency:tree
+
 
 배포시 디렉터리 구조
 ./file/ssl
@@ -34,7 +36,12 @@ for ((i=1;i<=100000;i++)); do curl -X POST -H "Content-Type:application/xml; cha
 
 
 
-
+#! /bin/bash
+./redis-server redis.6379.conf > /dev/null 2>&1&
+#! /bin/bash
+./redis-server redis.6380.conf > /dev/null 2>&1&
+#! /bin/bash
+./redis-server redis.6381.conf > /dev/null 2>&1&
 
 참고 URL :
 http://peyton.tk/index.php/post/20

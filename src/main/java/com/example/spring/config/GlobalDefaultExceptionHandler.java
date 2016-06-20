@@ -101,12 +101,12 @@ class GlobalDefaultExceptionHandler {
 	}
 
 	private ModelAndView xmlModelAndView(HttpServletRequest req, Exception e, Header header) {
-		ExceptionXml xml = new ExceptionXml();
-		xml.setUrl(req.getRequestURL().toString());
-		xml.setStackTrace(Throwables.getStackTraceAsString(e));
+		ExceptionXml body = new ExceptionXml();
+		body.setUrl(req.getRequestURL().toString());
+		body.setStackTrace(Throwables.getStackTraceAsString(e));
 		ModelAndView mav = new ModelAndView(xmlStringView);
 		mav.addObject("header", header);
-		mav.addObject("body", xml);
+		mav.addObject("body", body);
 		return mav;
 	}
 
