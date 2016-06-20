@@ -25,8 +25,6 @@ import com.example.app.junit.JunitConfig;
 @Transactional
 public class JdbcConfigTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcConfigTest.class);
-
-	// private ShardRedisTemplateRollback ShardRedisTemplateRollback;
 	
 	@Test
 	public void test() throws Exception {

@@ -1,0 +1,40 @@
+설치 디렉터리의 bin/ 로 이동후 env 파일 수정
+
+설치 디렉터리의 conf/ 로 이동후 activemq.xml 파일을 수정
+<broker>
+...
+		</systemUsage>
+	</systemUsage>
+
+	<plugins>
+		<simpleAuthenticationPlugin>
+			<users>
+				<authenticationUser username="seban21" password="!aA123456" groups="users"/>
+			</users>
+		</simpleAuthenticationPlugin>
+		<authorizationPlugin>
+			<map>
+				<authorizationMap>
+					<authorizationEntries>
+						<authorizationEntry queue=">" read="users" write="users" admin="users" />
+						<authorizationEntry topic=">" read="users" write="users" admin="users" />
+					</authorizationEntries>
+				</authorizationMap>
+			</map>
+		</authorizationPlugin>
+	</plugins>
+
+	<transportConnectors>
+		<transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
+	</transportConnectors>
+...
+</broker>
+
+설치 디렉터리의 conf/ 로 이동후 log4j.properties 파일을 수정
+
+
+http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-example-send.html
+http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-example-recv-direct.html
+http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-example-recv-via-adapter.html
+http://shengwangi.blogspot.kr/2015/06/spring-jms-with-activemq-hello-world.html
+http://127.0.0.1:8161/admin
