@@ -55,7 +55,7 @@ public class ActiveMQConfigTest {
 	@Ignore
 	@Test
 	public void test_echo() throws Exception {
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i < 100000; ++i) {
 			String text = UUID.randomUUID().toString();
 			jmsTemplate.send(defaultQueue, new MessageCreator() {
 
@@ -69,9 +69,9 @@ public class ActiveMQConfigTest {
 			});
 
 			LOGGER.debug("send {}", text);
-			
+
 			Message message = jmsTemplate.receive(defaultQueue);
-			
+
 			LOGGER.debug("JMSMessageID:{}", message.getJMSMessageID());
 			LOGGER.debug("JMSCorrelationID:{}", message.getJMSCorrelationID());
 			LOGGER.debug("JMSDeliveryMode:{}", message.getJMSDeliveryMode());
@@ -104,6 +104,40 @@ public class ActiveMQConfigTest {
 
 	@Ignore
 	@Test
+	public void test_send_recv_setTimeToLive() throws Exception {
+		String text = UUID.randomUUID().toString();
+
+		jmsTemplate.setTimeToLive(1000L);
+		jmsTemplate.setExplicitQosEnabled(true);
+
+		jmsTemplate.send(defaultQueue, new MessageCreator() {
+
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				Message message = session.createTextMessage(text);
+				return message;
+			}
+		});
+
+		Thread.sleep(1001L);
+
+		LOGGER.debug("send {}", text);
+
+		jmsTemplate.setReceiveTimeout(2000);
+
+		Message message = jmsTemplate.receive(defaultQueue);
+		if (message != null) {
+			LOGGER.debug("JMSMessageID:{}", message.getJMSMessageID());
+			LOGGER.debug("JMSCorrelationID:{}", message.getJMSCorrelationID());
+			LOGGER.debug("JMSDeliveryMode:{}", message.getJMSDeliveryMode());
+			LOGGER.debug("JMSExpiration:{}", message.getJMSExpiration());
+			LOGGER.debug("JMSTimestamp:{}", message.getJMSTimestamp());
+			LOGGER.debug("JMSType:{}", message.getJMSType());
+		}
+	}
+
+	@Ignore
+	@Test
 	public void test_topic() throws Exception {
 		for (int i = 0; i < 1000000; ++i) {
 			String text = UUID.randomUUID().toString();
@@ -112,6 +146,8 @@ public class ActiveMQConfigTest {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					Message message = session.createTextMessage(text);
+					message.setJMSCorrelationID(UUID.randomUUID().toString());
+					message.setJMSType("TEXT");
 					return message;
 				}
 			});
