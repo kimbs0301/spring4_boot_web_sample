@@ -14,15 +14,20 @@ import org.springframework.jms.listener.SessionAwareMessageListener;
  * @author gimbyeongsu
  * 
  */
-public class JmsMessageListener implements SessionAwareMessageListener<TextMessage> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(JmsMessageListener.class);
+public class QueueMessageListener implements SessionAwareMessageListener<TextMessage> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessageListener.class);
 
-	public JmsMessageListener() {
+	public QueueMessageListener() {
 	}
 
 	@Override
 	public void onMessage(TextMessage message, Session session) throws JMSException {
-		LOGGER.debug("{}", message.getJMSMessageID());
+		LOGGER.debug("JMSMessageID:{}", message.getJMSMessageID());
+		LOGGER.debug("JMSCorrelationID:{}", message.getJMSCorrelationID());
+		LOGGER.debug("JMSDeliveryMode:{}", message.getJMSDeliveryMode());
+		LOGGER.debug("JMSExpiration:{}", message.getJMSExpiration());
+		LOGGER.debug("JMSTimestamp:{}", message.getJMSTimestamp());
+		LOGGER.debug("JMSType:{}", message.getJMSType());
 		LOGGER.debug("{}", message.getText());
 
 		ActiveMQTextMessage textMessage = new ActiveMQTextMessage();

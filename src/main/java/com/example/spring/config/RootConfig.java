@@ -43,14 +43,19 @@ public class RootConfig {
 	public RootConfig() {
 		LOGGER.debug("생성자 RootConfig()");
 	}
-	
+
 	@Bean(name = "configProperties")
 	public PropertiesFactoryBean configProperties() {
 		PropertiesFactoryBean properties = new PropertiesFactoryBean();
 		String[] profiles = environment.getActiveProfiles();
 		ClassPathResource[] classPathResources = new ClassPathResource[profiles.length];
 		for (int i = 0; i < profiles.length; ++i) {
-			classPathResources[i] = new ClassPathResource("application-" + profiles[i] + ".properties");
+			String profile = profiles[i];
+			if ("junit".equals(profile) || "local".equals(profile)) {
+				classPathResources[i] = new ClassPathResource("application-" + profiles[i] + ".properties");
+			} else {
+				classPathResources[i] = new ClassPathResource("config/application-" + profiles[i] + ".properties");
+			}
 		}
 		properties.setLocations(classPathResources);
 		return properties;
@@ -84,7 +89,7 @@ public class RootConfig {
 		mapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
 		return mapper;
 	}
-	
+
 	@PreDestroy
 	public void destroy() {
 		LOGGER.debug("spring.profiles.active={}", environment.getRequiredProperty("spring.profiles.active"));

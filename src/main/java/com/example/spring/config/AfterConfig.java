@@ -23,7 +23,7 @@ import com.example.spring.batch.Batch;
  * @author gimbyeongsu
  * 
  */
-@Profile({ "local", "svc" })
+@Profile({ "local", "svc.01", "svc.02" })
 @Configuration
 @DependsOn(value = { "rootConfig", "jdbcConfig", "redisConfig", "cacheConfig", "schedulingConfig",
 		"delegatingWebMvcConfig", "webMvcConfig" })

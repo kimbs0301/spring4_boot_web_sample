@@ -23,6 +23,12 @@ import com.example.spring.config.WebAppContextConfig;
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+	public static final String[] PROFILE;
+	
+	static {
+		PROFILE = new String[] { "local", "svc.01", "svc.02" };
+	}
+	
 	public Application() {
 		LOGGER.debug("생성자 Application()");
 	}

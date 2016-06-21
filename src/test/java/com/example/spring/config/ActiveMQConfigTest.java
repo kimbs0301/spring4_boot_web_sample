@@ -7,6 +7,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +42,9 @@ public class ActiveMQConfigTest {
 	@Qualifier("defaultQueue")
 	@Autowired
 	private ActiveMQQueue defaultQueue;
+	@Qualifier("defaultTopic")
+	@Autowired
+	private ActiveMQTopic defaultTopic;
 	@Qualifier("recvQueue")
 	@Autowired
 	private ActiveMQQueue recvQueue;
@@ -58,13 +62,22 @@ public class ActiveMQConfigTest {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					Message message = session.createTextMessage(text);
+					message.setJMSCorrelationID(UUID.randomUUID().toString());
+					message.setJMSType("TEXT");
 					return message;
 				}
 			});
 
 			LOGGER.debug("send {}", text);
+			
 			Message message = jmsTemplate.receive(defaultQueue);
-			LOGGER.debug("{}", message.getJMSMessageID());
+			
+			LOGGER.debug("JMSMessageID:{}", message.getJMSMessageID());
+			LOGGER.debug("JMSCorrelationID:{}", message.getJMSCorrelationID());
+			LOGGER.debug("JMSDeliveryMode:{}", message.getJMSDeliveryMode());
+			LOGGER.debug("JMSExpiration:{}", message.getJMSExpiration());
+			LOGGER.debug("JMSTimestamp:{}", message.getJMSTimestamp());
+			LOGGER.debug("JMSType:{}", message.getJMSType());
 		}
 	}
 
@@ -86,6 +99,24 @@ public class ActiveMQConfigTest {
 			LOGGER.debug("send {}", text);
 			Message message = jmsTemplate.receive(ackQueue);
 			LOGGER.debug("{}", message.getJMSMessageID());
+		}
+	}
+
+	@Ignore
+	@Test
+	public void test_topic() throws Exception {
+		for (int i = 0; i < 1000000; ++i) {
+			String text = UUID.randomUUID().toString();
+			jmsTemplate.send(defaultTopic, new MessageCreator() {
+
+				@Override
+				public Message createMessage(Session session) throws JMSException {
+					Message message = session.createTextMessage(text);
+					return message;
+				}
+			});
+
+			LOGGER.debug("send {}", text);
 		}
 	}
 }

@@ -47,7 +47,7 @@ public class EmbeddedTomcatConfig {
 
 	@Bean
 	public EmbeddedServletContainerFactory servletContainer() {
-		int port = environment.getRequiredProperty("server.port", Integer.class);
+		int port = environment.getRequiredProperty("server.http.port", Integer.class);
 		String contextPath = environment.getRequiredProperty("context.path");
 		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(contextPath, port);
 
@@ -142,11 +142,12 @@ public class EmbeddedTomcatConfig {
 	}
 	
 	private Connector createSslConnector() {
+		int port = environment.getRequiredProperty("server.https.port", Integer.class);
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setURIEncoding("UTF-8");
 		connector.setScheme("https");
 		connector.setSecure(true);
-		connector.setPort(8443);
+		connector.setPort(port);
 		connector.setEnableLookups(false);
 		
 		connector.setProperty("acceptCount", "10");

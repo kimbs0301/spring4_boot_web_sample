@@ -28,7 +28,7 @@ import com.google.common.base.Throwables;
  * 
  * @author gimbyeongsu
  */
-@Profile({ "local", "svc" })
+@Profile({ "local", "svc.01", "svc.02" })
 @ControllerAdvice
 class GlobalDefaultExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);

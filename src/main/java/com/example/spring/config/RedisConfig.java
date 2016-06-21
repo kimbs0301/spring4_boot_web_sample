@@ -58,7 +58,7 @@ public class RedisConfig {
 		return jedisPool;
 	}
 
-	@Profile({ "local", "svc" })
+	@Profile({ "local", "svc.01", "svc.02" })
 	@Bean
 	public RedisTemplate redisTemplate() {
 		RedisTemplate redisTemplate = new RedisTemplate("DEFAULT");
@@ -96,7 +96,7 @@ public class RedisConfig {
 		return jedisPool;
 	}
 
-	@Profile({ "local", "svc" })
+	@Profile({ "local", "svc.01", "svc.02" })
 	@Bean
 	public ShardRedisTemplate shardRedisTemplate() {
 		ShardRedisTemplate redisTemplate = new ShardRedisTemplate("SHARD");
