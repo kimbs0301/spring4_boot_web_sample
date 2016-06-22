@@ -23,6 +23,13 @@ CREATE TABLE test_log.`account_log` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE test_log.`member_log` (
+  `log_id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
+  `crt_date` datetime NOT NULL,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE test_shard0.`member` (
   `id` int(11) NOT NULL,
   `name` varchar(10) NOT NULL,
