@@ -30,7 +30,8 @@ public class ActiveMQConfig {
 
 	@Bean
 	public ActiveMQConnectionFactory connectionFactory() {
-		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://127.0.0.1:61616");
+		String brokerURL = "nio://127.0.0.1:61616?wireFormat.tightEncodingEnabled=false";
+		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);
 		connectionFactory.setUserName("seban21");
 		connectionFactory.setPassword("!aA123456");
 		return connectionFactory;

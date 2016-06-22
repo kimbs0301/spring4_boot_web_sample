@@ -2,6 +2,7 @@ package com.example.spring.config;
 
 import java.util.UUID;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -55,7 +56,9 @@ public class ActiveMQConfigTest {
 	@Ignore
 	@Test
 	public void test_echo() throws Exception {
-		for (int i = 0; i < 100000; ++i) {
+		jmsTemplate.setDeliveryMode(DeliveryMode.PERSISTENT);
+
+		for (int i = 0; i < 100; ++i) {
 			String text = UUID.randomUUID().toString();
 			jmsTemplate.send(defaultQueue, new MessageCreator() {
 
@@ -78,6 +81,9 @@ public class ActiveMQConfigTest {
 			LOGGER.debug("JMSExpiration:{}", message.getJMSExpiration());
 			LOGGER.debug("JMSTimestamp:{}", message.getJMSTimestamp());
 			LOGGER.debug("JMSType:{}", message.getJMSType());
+			LOGGER.debug("JMSReplyTo:{}", message.getJMSReplyTo());
+			LOGGER.debug("JMSPriority:{}", message.getJMSPriority());
+			LOGGER.debug("JMSRedelivered:{}", message.getJMSRedelivered());
 		}
 	}
 
@@ -139,7 +145,7 @@ public class ActiveMQConfigTest {
 	@Ignore
 	@Test
 	public void test_topic() throws Exception {
-		for (int i = 0; i < 1000000; ++i) {
+		for (int i = 0; i < 10000; ++i) {
 			String text = UUID.randomUUID().toString();
 			jmsTemplate.send(defaultTopic, new MessageCreator() {
 

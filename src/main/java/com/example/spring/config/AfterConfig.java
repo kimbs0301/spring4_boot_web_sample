@@ -68,6 +68,7 @@ public class AfterConfig {
 				}
 			}
 			if (doneList.size() == batchs.size()) {
+				LOGGER.debug("실행 중인 배치가 없습니다.");
 				break;
 			}
 			try {

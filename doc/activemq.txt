@@ -1,10 +1,43 @@
-설치 디렉터리의 bin/ 로 이동후 env 파일 수정
+가볍게 구동 하기 설정
 
-설치 디렉터리의 conf/ 로 이동후 activemq.xml 파일을 수정
+1. 설치 디렉터리의 bin/ 로 이동후 env 파일 수정
+
+ACTIVEMQ_OPTS_MEMORY="-server -Xms256M -Xmx256M"
+ACTIVEMQ_OPTS="$ACTIVEMQ_OPTS -Dorg.apache.activemq.UseDedicatedTaskRunner=false -Dorg.apache.activemq.transport.nio.SelectorManager.corePoolSize=30 -Dorg.apache.activemq.transport.nio.SelectorManager.maximumPoolSize=30"
+
+2. 설치 디렉터리의 conf/ 로 이동후 activemq.xml 파일을 수정
 <broker>
 ...
+
+	<destinationPolicy>
+		<policyMap>
+			<policyEntries>
+				<policyEntry topic=">" >
+				...
+				</policyEntry>
+				<policyEntry queue=">" optimizedDispatch="true"/>
+			</policyEntries>
+		</policyMap>
+	</destinationPolicy>
+
+...
+
+	<systemUsage>
+		<systemUsage>
+			<memoryUsage>
+				<!--<memoryUsage percentOfJvmHeap="70" />-->
+				<memoryUsage limit="128 mb"/>
+			</memoryUsage>
+			<storeUsage>
+				<storeUsage limit="64 mb"/>
+			</storeUsage>
+			<tempUsage>
+				<tempUsage limit="64 mb"/>
+			</tempUsage>
 		</systemUsage>
 	</systemUsage>
+
+...
 
 	<plugins>
 		<simpleAuthenticationPlugin>
@@ -25,12 +58,12 @@
 	</plugins>
 
 	<transportConnectors>
-		<transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
+		<transportConnector name="nio" uri="nio://0.0.0.0:61616"/>
 	</transportConnectors>
 ...
 </broker>
 
-설치 디렉터리의 conf/ 로 이동후 log4j.properties 파일을 수정
+3. 설치 디렉터리의 conf/ 로 이동후 log4j.properties 파일을 수정
 
 
 http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-example-send.html
@@ -38,4 +71,6 @@ http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-exampl
 http://shengwangi.blogspot.kr/2014/10/spring-jms-with-activemq-helloworld-example-recv-via-adapter.html
 http://shengwangi.blogspot.kr/2015/06/spring-jms-with-activemq-hello-world.html
 https://spring.io/guides/gs/messaging-jms/
+http://gnujava.com/board/article_view.jsp?&article_no=7179&menu_cd=17&board_no=4&table_cd=EPAR01&table_no=01
+http://activemq.apache.org/nio-transport-reference.html
 http://127.0.0.1:8161/admin

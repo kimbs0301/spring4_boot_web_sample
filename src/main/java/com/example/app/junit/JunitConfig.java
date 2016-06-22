@@ -20,7 +20,8 @@ import com.example.spring.config.WebMvcConfig;
 @Configuration
 @ComponentScan(basePackages = { "com.example.spring" }, excludeFilters = {
 		@Filter(value = { WebAppContextConfig.class, WebMvcConfig.class, DelegatingWebMvcConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
-		@Filter(value = { RestController.class, Controller.class }, type = FilterType.ANNOTATION) })
+		@Filter(value = { RestController.class, Controller.class }, type = FilterType.ANNOTATION),
+		@Filter(pattern = { "com.example.spring.*.model.*" }, type = FilterType.REGEX) })
 public class JunitConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JunitConfig.class);
 
