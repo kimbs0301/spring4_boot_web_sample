@@ -2,11 +2,17 @@ package com.example.spring.logic.member.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.example.spring.logic.account.dao.AccountDao;
 import com.example.spring.logic.account.dao.AccountLogDao;
@@ -35,6 +41,9 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberLogDao memberLogDao;
 
+//	 @Resource(name = "txManager")
+//	 protected PlatformTransactionManager transactionManager;
+
 	public MemberServiceImpl() {
 		LOGGER.debug("생성자 MemberServiceImpl()");
 	}
@@ -42,6 +51,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	@Transactional
 	public void test() {
+
+//		 DefaultTransactionDefinition tx = new DefaultTransactionDefinition( TransactionDefinition.PROPAGATION_REQUIRED );
+//		 tx.setName( "example-transaction" );
+//		
+//		 TransactionStatus status = transactionManager.getTransaction(tx);
+//		
+//		 transactionManager.rollback( status );
+//		
+//		 transactionManager.commit( status );
+
 		LOGGER.debug("");
 
 		Account account = new Account();
