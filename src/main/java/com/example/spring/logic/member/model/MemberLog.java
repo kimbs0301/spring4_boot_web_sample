@@ -7,9 +7,18 @@ import java.util.Date;
  * 
  */
 public class MemberLog {
+	private boolean isRollback;
 	private long logId;
 	private int id;
 	private Date crtDate;
+
+	public boolean isRollback() {
+		return isRollback;
+	}
+
+	public void setRollback(boolean isRollback) {
+		this.isRollback = isRollback;
+	}
 
 	public long getLogId() {
 		return logId;

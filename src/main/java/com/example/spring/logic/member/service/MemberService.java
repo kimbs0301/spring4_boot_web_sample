@@ -17,4 +17,6 @@ public interface MemberService {
 	public void insert(MemberLog memberLog);
 	
 	public void insert(List<MemberLog> memberLogs);
+	
+	public void insertForkJoin(List<MemberLog> memberLogs);
 }

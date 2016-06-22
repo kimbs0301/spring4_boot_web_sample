@@ -27,10 +27,10 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 @EnableTransactionManagement
 public class JdbcConfig implements TransactionManagementConfigurer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcConfig.class);
-	
+
 	@Autowired
 	private Environment environment;
-	
+
 	public JdbcConfig() {
 		LOGGER.debug("생성자 JdbcConfig()");
 	}
@@ -152,18 +152,15 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 		return new DataSourceTransactionManager(shard1LazyDataSource());
 	}
 
-	// @Bean(name = "txManager")
-	// public PlatformTransactionManager transactionManager() {
-	// LOGGER.debug("@@@@@@");
-	// ChainedTransactionManager txManager = new ChainedTransactionManager(dataTransactionManager(),
-	// logTransactionManager(), shard0TransactionManager(), shard1TransactionManager());
-	// return txManager;
-	// }
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		ChainedTransactionManager txManager = new ChainedTransactionManager(dataTransactionManager(), logTransactionManager(), shard0TransactionManager(),
+				shard1TransactionManager());
+		return txManager;
+	}
 
 	@Override
 	public PlatformTransactionManager annotationDrivenTransactionManager() {
-		ChainedTransactionManager txManager = new ChainedTransactionManager(dataTransactionManager(),
-				logTransactionManager(), shard0TransactionManager(), shard1TransactionManager());
-		return txManager;
+		return transactionManager();
 	}
 }
