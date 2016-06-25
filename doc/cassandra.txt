@@ -1,0 +1,119 @@
+가볍게 구동 하기 설정
+
+카산드라 다운로드
+https://archive.apache.org/dist/cassandra/2.1.14/
+
+http://wiki.apache.org/cassandra/GettingStarted
+
+ifconfig lo0 alias 127.0.0.10
+ifconfig lo0 alias 127.0.0.11
+ifconfig lo0 alias 127.0.0.12
+ifconfig lo0 alias 127.0.0.13
+
+vi /tools/cassandra/2.1.14-01/conf/cassandra.yaml
+vi /tools/cassandra/2.1.14-02/conf/cassandra.yaml
+vi /tools/cassandra/2.1.14-03/conf/cassandra.yaml
+vi /tools/cassandra/2.1.14-04/conf/cassandra.yaml
+- seeds: "127.0.0.10,127.0.0.12"
+listen_address: 127.0.0.10
+rpc_address: 127.0.0.10
+
+vi /tools/cassandra/2.1.14-01/conf/cassandra-env.sh
+vi /tools/cassandra/2.1.14-02/conf/cassandra-env.sh
+vi /tools/cassandra/2.1.14-03/conf/cassandra-env.sh
+vi /tools/cassandra/2.1.14-04/conf/cassandra-env.sh
+JMX_PORT="7199"
+MAX_HEAP_SIZE="256M"
+HEAP_NEWSIZE="128M"
+
+
+sh /tools/cassandra/2.1.14-01/bin/cassandra -f
+sh /tools/cassandra/2.1.14-03/bin/cassandra -f
+sh /tools/cassandra/2.1.14-02/bin/cassandra -f
+sh /tools/cassandra/2.1.14-04/bin/cassandra -f
+
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 status
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 status
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 status
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 status
+
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 stopdaemon
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 stopdaemon
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 stopdaemon
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 stopdaemon
+
+sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.10 9042
+sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.11 9042
+sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.12 9042
+sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.13 9042
+
+
+sh /tools/cassandra/apache-cassandra-2.1.14/bin/cassandra -f
+sh /tools/cassandra/apache-cassandra-2.1.14/bin/cqlsh 127.0.0.1 9042
+
+
+CREATE KEYSPACE mykeyspace
+WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+
+
+describe keyspaces
+
+
+USE mykeyspace;
+
+
+CREATE TABLE users (
+  user_id int PRIMARY KEY,
+  fname text,
+  lname text
+);
+
+
+INSERT INTO users (user_id,  fname, lname) VALUES (1745, 'john', 'smith');
+INSERT INTO users (user_id,  fname, lname) VALUES (1744, 'john', 'doe');
+INSERT INTO users (user_id,  fname, lname) VALUES (1746, 'john', 'smith');
+
+
+SELECT * FROM users;
+
+ user_id | fname | lname
+---------+-------+-------
+    1745 |  john | smith
+    1744 |  john |   doe
+    1746 |  john | smith
+
+
+CREATE INDEX ON users (lname);
+
+SELECT * FROM users WHERE lname = 'smith';
+
+ user_id | fname | lname
+---------+-------+-------
+    1745 |  john | smith
+    1746 |  john | smith
+
+
+
+
+USE mykeyspace;
+CREATE TABLE person (id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC);
+CREATE INDEX ix_person_name ON person (name);
+
+
+CREATE TABLE login_event(
+	person_id text,
+	event_time timestamp,
+	event_code int,
+	ip_address text,
+	primary key (person_id, event_time))
+with CLUSTERING ORDER BY (event_time DESC);
+
+
+
+http://meetup.toast.com/posts/58
+http://meetup.toast.com/posts/60
+http://meetup.toast.com/posts/65
+http://projects.spring.io/spring-data-cassandra/
+http://docs.spring.io/spring-data/cassandra/docs/1.4.2.RELEASE/reference/html/
+https://github.com/spring-projects/spring-data-cassandra
+https://dzone.com/articles/set-up-a-springdata-project-with-apache-cassandra
