@@ -62,6 +62,15 @@ CREATE TABLE test_shard1.`user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE test_data.`book` (
+  `id` int(11) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  `upd_date` datetime NOT NULL,
+  `crt_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
 
 select * from test_data.account;
 select * from test_log.account_log;
@@ -69,6 +78,7 @@ select * from test_shard0.member;
 select * from test_shard1.member;
 select * from test_shard0.user;
 select * from test_shard1.user;
+select * from test_data.`book`;
 
 delete from test_data.account;
 delete from test_log.account_log;
@@ -76,3 +86,4 @@ delete from test_shard0.member;
 delete from test_shard1.member;
 delete from test_shard0.user;
 delete from test_shard1.user;
+delete from test_data.`book`;

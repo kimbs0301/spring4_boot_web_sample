@@ -76,23 +76,11 @@ INSERT INTO users (user_id,  fname, lname) VALUES (1746, 'john', 'smith');
 
 SELECT * FROM users;
 
- user_id | fname | lname
----------+-------+-------
-    1745 |  john | smith
-    1744 |  john |   doe
-    1746 |  john | smith
-
 
 CREATE INDEX ON users (lname);
 
+
 SELECT * FROM users WHERE lname = 'smith';
-
- user_id | fname | lname
----------+-------+-------
-    1745 |  john | smith
-    1746 |  john | smith
-
-
 
 
 USE mykeyspace;
@@ -117,3 +105,4 @@ http://projects.spring.io/spring-data-cassandra/
 http://docs.spring.io/spring-data/cassandra/docs/1.4.2.RELEASE/reference/html/
 https://github.com/spring-projects/spring-data-cassandra
 https://dzone.com/articles/set-up-a-springdata-project-with-apache-cassandra
+http://docs.datastax.com/en/cql/3.1/cql/cql_reference/capture_r.html

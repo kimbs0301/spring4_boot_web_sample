@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.datastax.driver.core.ConsistencyLevel;
+import com.datastax.driver.core.querybuilder.Delete;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Update;
 import com.example.app.junit.JunitConfig;
@@ -28,7 +29,7 @@ import com.example.spring.logic.cassandra.model.Person;
  * @author gimbyeongsu
  * 
  */
-@FixMethodOrder(MethodSorters.JVM)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = { JunitConfig.class })
 @WebAppConfiguration
@@ -41,17 +42,17 @@ public class CassandraConfigTest {
 	private CassandraTemplate cassandraTemplate;
 	
 	@Test
-	public void test_init() throws Exception {
+	public void test0_init() throws Exception {
 		cassandraTemplate.truncate("person");
 		cassandraTemplate.execute("DROP TABLE person");
 		
-		cassandraTemplate.execute("create table person (id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC)");
+		cassandraTemplate.execute("create table person(id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC)");
 		cassandraTemplate.execute("CREATE INDEX ix_person_name ON person (name)");
 	}
 
 	@Test
-	public void test_cql_insert() throws Exception {
-		String cql = "INSERT INTO person (id,  event_time, name,age) VALUES (?, ?, ?, ?)";
+	public void test1_cql_insert() throws Exception {
+		String cql = "INSERT INTO person(id,  event_time, name,age) VALUES(?, ?, ?, ?)";
 
 		List<Object> person1 = new ArrayList<>();
 		person1.add("10000");
@@ -75,7 +76,7 @@ public class CassandraConfigTest {
 	}
 
 	@Test
-	public void test_cql_update() throws Exception {
+	public void test2_update() throws Exception {
 		Update update = QueryBuilder.update("person");
 		update.setConsistencyLevel(ConsistencyLevel.ONE);
 		update.with(QueryBuilder.set("age", 35));
@@ -83,9 +84,20 @@ public class CassandraConfigTest {
 		update.where(QueryBuilder.eq("id", "10000")).and(QueryBuilder.eq("event_time", dt1.toDate()));
 
 		cassandraTemplate.execute(update);
-		
+	}
+	
+	@Test
+	public void test3_cql_select() throws Exception {
 		String cqlOne = "select * from person where id = '10000'";
-		Person p = cassandraTemplate.selectOne(cqlOne, Person.class);
-		LOGGER.debug("{}", p);
+		Person person = cassandraTemplate.selectOne(cqlOne, Person.class);
+		LOGGER.debug("{}", person);
+	}
+	
+	@Test
+	public void test4_delete() throws Exception {
+		Delete delete = QueryBuilder.delete().from("person");
+		delete.where(QueryBuilder.eq("id", "10000"));
+		
+		cassandraTemplate.execute(delete);
 	}
 }
