@@ -37,10 +37,24 @@ sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 status
 sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 status
 sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 status
 
-sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 stopdaemon
-sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 stopdaemon
-sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 stopdaemon
 sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 stopdaemon
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 stopdaemon
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 stopdaemon
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 stopdaemon
+
+백업
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 snapshot mykeyspace
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 snapshot system
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 snapshot system_traces
+
+전부 백업
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 snapshot
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 snapshot
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 snapshot
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 snapshot
+
+키스페이스 상태 보기
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 cfstats
 
 sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.10 9042
 sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.11 9042
