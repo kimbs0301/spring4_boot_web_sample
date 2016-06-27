@@ -16,6 +16,7 @@ public class TopicMessageListener implements SessionAwareMessageListener<TextMes
 	private static final Logger LOGGER = LoggerFactory.getLogger(TopicMessageListener.class);
 
 	public TopicMessageListener() {
+		LOGGER.debug("생성자 TopicMessageListener()");
 	}
 
 	@Override

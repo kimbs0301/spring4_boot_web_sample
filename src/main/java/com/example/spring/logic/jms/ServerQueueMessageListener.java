@@ -1,24 +1,25 @@
 package com.example.spring.logic.jms;
 
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import org.apache.activemq.command.ActiveMQTextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.listener.SessionAwareMessageListener;
+
+import com.example.spring.config.AppContextAware;
+import com.example.spring.logic.common.service.CommonService;
 
 /**
  * @author gimbyeongsu
  * 
  */
-public class QueueMessageListener implements SessionAwareMessageListener<TextMessage> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(QueueMessageListener.class);
+public class ServerQueueMessageListener implements SessionAwareMessageListener<TextMessage> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQueueMessageListener.class);
 
-	public QueueMessageListener() {
-		LOGGER.debug("생성자 QueueMessageListener()");
+	public ServerQueueMessageListener() {
+		LOGGER.debug("생성자 ServerQueueMessageListener()");
 	}
 
 	@Override
@@ -31,10 +32,13 @@ public class QueueMessageListener implements SessionAwareMessageListener<TextMes
 		LOGGER.debug("JMSType:{}", message.getJMSType());
 		LOGGER.debug("{}", message.getText());
 
-		ActiveMQTextMessage textMessage = new ActiveMQTextMessage();
-		textMessage.setText("ack message");
+		if ("inMemoryRefresh".equals(message.getJMSType())) {
+			String cacheName = message.getText();
 
-		MessageProducer producer = session.createProducer(message.getJMSReplyTo());
-		producer.send(textMessage);
+			LOGGER.debug("{}", AppContextAware.getAppCtx());
+			
+			CommonService commonService = AppContextAware.getAppCtx().getBean("commonServiceImpl", CommonService.class);
+			commonService.inMemoryRefresh(cacheName);
+		}
 	}
 }

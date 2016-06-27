@@ -37,10 +37,18 @@ sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 status
 sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 status
 sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 status
 
-sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 stopdaemon
-sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 stopdaemon
-sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 stopdaemon
-sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 stopdaemon
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 disablegossip
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 disablethrift
+sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 drain
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 disablegossip
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 disablethrift
+sh /tools/cassandra/2.1.14-02/bin/nodetool -h 127.0.0.1 -p 7299 drain
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 disablegossip
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 disablethrift
+sh /tools/cassandra/2.1.14-03/bin/nodetool -h 127.0.0.1 -p 7399 drain
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 disablegossip
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 disablethrift
+sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 drain
 
 백업
 sh /tools/cassandra/2.1.14-01/bin/nodetool -h 127.0.0.1 -p 7199 snapshot mykeyspace

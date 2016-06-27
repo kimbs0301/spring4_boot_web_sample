@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.spring.config.InMemoryRefresh;
 import com.example.spring.logic.account.dao.AccountDao;
 import com.example.spring.logic.account.dao.AccountLogDao;
 import com.example.spring.logic.account.model.Account;
@@ -26,7 +27,7 @@ import com.example.spring.logic.member.service.MemberService;
  * 
  */
 @Service
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService, InMemoryRefresh {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImpl.class);
 
 	@Autowired
@@ -105,5 +106,15 @@ public class MemberServiceImpl implements MemberService {
 		ForkJoinPool pool = new ForkJoinPool(processors);
 		MemberLogForkJoin task = new MemberLogForkJoin(transactionManager, memberLogDao, memberLogs);
 		pool.invoke(task);
+	}
+
+	@Override
+	public String getInMemoryRefreshName() {
+		return "memberService";
+	}
+
+	@Override
+	public void refresh() {
+		LOGGER.debug("refresh");
 	}
 }

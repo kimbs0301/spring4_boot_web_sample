@@ -1,19 +1,27 @@
 package com.example.spring.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.env.Environment;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 import com.example.spring.logic.jms.QueueMessageListener;
+import com.example.spring.logic.jms.ServerQueueMessageListener;
 import com.example.spring.logic.jms.TopicMessageListener;
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
 
 /**
  * @author gimbyeongsu
@@ -23,6 +31,9 @@ import com.example.spring.logic.jms.TopicMessageListener;
 @DependsOn(value = { "rootConfig" })
 public class ActiveMQConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQConfig.class);
+
+	@Autowired
+	private Environment environment;
 
 	public ActiveMQConfig() {
 		LOGGER.debug("생성자 ActiveMQConfig()");
@@ -102,5 +113,40 @@ public class ActiveMQConfig {
 		listener.setDestination(defaultTopic());
 		listener.setMessageListener(topicMessageListener());
 		return listener;
+	}
+
+	@Bean(name = "serverNameQueueList")
+	public List<ActiveMQQueue> serverNameQueueList() {
+		List<String> serverNameList = Splitter.on(CharMatcher.anyOf(",)")).trimResults().omitEmptyStrings()
+				.splitToList(environment.getRequiredProperty("server.name.list"));
+		List<ActiveMQQueue> queueList = new ArrayList<>();
+		for (String serverName : serverNameList) {
+			ActiveMQQueue queue = new ActiveMQQueue(serverName);
+			queueList.add(queue);
+		}
+		return queueList;
+	}
+
+	@Bean
+	public ServerQueueMessageListener serverQueueMessageListener() {
+		ServerQueueMessageListener messageListener = new ServerQueueMessageListener();
+		return messageListener;
+	}
+
+	@Bean
+	public DefaultMessageListenerContainer serverQueueMessageListenerContainer() {
+		// server to server push
+		DefaultMessageListenerContainer listener = new DefaultMessageListenerContainer();
+		listener.setConnectionFactory(connectionFactory());
+		ActiveMQQueue queue = new ActiveMQQueue(getProfile());
+		listener.setDestination(queue);
+		listener.setMessageListener(serverQueueMessageListener());
+		return listener;
+	}
+
+	private String getProfile() {
+		String[] profiles = environment.getActiveProfiles();
+		String profile = profiles[0];
+		return profile;
 	}
 }
