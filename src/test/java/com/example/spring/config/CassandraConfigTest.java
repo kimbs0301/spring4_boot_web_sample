@@ -36,17 +36,15 @@ import com.example.spring.logic.cassandra.model.Person;
 @ActiveProfiles(profiles = { "junit" })
 @TestPropertySource(locations = "classpath:application-junit.properties")
 public class CassandraConfigTest {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQConfigTest.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraConfigTest.class);
+
 	@Autowired
 	private CassandraTemplate cassandraTemplate;
-	
+
 	@Test
 	public void test0_init() throws Exception {
-		cassandraTemplate.truncate("person");
-		cassandraTemplate.execute("DROP TABLE person");
-		
-		cassandraTemplate.execute("create table person(id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC)");
+		cassandraTemplate
+				.execute("CREATE TABLE person(id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC)");
 		cassandraTemplate.execute("CREATE INDEX ix_person_name ON person (name)");
 	}
 
@@ -85,19 +83,25 @@ public class CassandraConfigTest {
 
 		cassandraTemplate.execute(update);
 	}
-	
+
 	@Test
 	public void test3_cql_select() throws Exception {
 		String cqlOne = "select * from person where id = '10000'";
 		Person person = cassandraTemplate.selectOne(cqlOne, Person.class);
 		LOGGER.debug("{}", person);
 	}
-	
+
 	@Test
 	public void test4_delete() throws Exception {
 		Delete delete = QueryBuilder.delete().from("person");
 		delete.where(QueryBuilder.eq("id", "10000"));
-		
+
 		cassandraTemplate.execute(delete);
+	}
+
+	@Test
+	public void test5_dropTable() throws Exception {
+		cassandraTemplate.truncate("person");
+		cassandraTemplate.execute("DROP TABLE person");
 	}
 }
