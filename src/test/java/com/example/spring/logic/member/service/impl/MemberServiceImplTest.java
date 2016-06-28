@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ public class MemberServiceImplTest {
 		memberService.test();
 	}
 
+	@Ignore
 	@Test
 	public void test_insertForkJoin() throws Exception {
 		LOGGER.debug("");

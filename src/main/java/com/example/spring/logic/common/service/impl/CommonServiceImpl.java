@@ -16,7 +16,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
-import com.example.spring.config.InMemoryRefresh;
+import com.example.spring.config.InMemoryCacheRefresh;
 import com.example.spring.logic.common.service.CommonService;
 
 /**
@@ -32,10 +32,10 @@ public class CommonServiceImpl implements CommonService {
 	@Autowired
 	private JmsTemplate jmsTemplate;
 	@Resource
-	private List<InMemoryRefresh> inMemoryRefreshList;
+	private List<InMemoryCacheRefresh> inMemoryRefreshList;
 
 	@Override
-	public void startInMemoryRefresh(final String cacheName) {
+	public void pushInMemoryCacheRefresh(final String cacheName) {
 		for (ActiveMQQueue queue : serverNameQueueList) {
 			LOGGER.debug("{}", queue);
 			jmsTemplate.send(queue, new MessageCreator() {
@@ -44,7 +44,7 @@ public class CommonServiceImpl implements CommonService {
 				public Message createMessage(Session session) throws JMSException {
 					Message message = session.createTextMessage(cacheName);
 					message.setJMSCorrelationID(UUID.randomUUID().toString());
-					message.setJMSType("inMemoryRefresh");
+					message.setJMSType("inMemoryCacheRefresh");
 					return message;
 				}
 			});
@@ -52,12 +52,12 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public void inMemoryRefresh(String cacheName) {
-		for (InMemoryRefresh each : inMemoryRefreshList) {
+	public void inMemoryCacheRefresh(String cacheName) {
+		for (InMemoryCacheRefresh each : inMemoryRefreshList) {
 			if ("all".equals(cacheName)) {
-				each.refresh();
-			} else if (each.getInMemoryRefreshName().equals(cacheName)) {
-				each.refresh();
+				each.cacheRefresh();
+			} else if (each.getCacheRefreshName().equals(cacheName)) {
+				each.cacheRefresh();
 			} else {
 				LOGGER.warn("{}", cacheName);
 			}

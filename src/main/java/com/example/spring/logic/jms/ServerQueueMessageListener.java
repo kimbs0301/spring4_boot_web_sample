@@ -6,9 +6,9 @@ import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 
-import com.example.spring.config.AppContextAware;
 import com.example.spring.logic.common.service.CommonService;
 
 /**
@@ -17,6 +17,9 @@ import com.example.spring.logic.common.service.CommonService;
  */
 public class ServerQueueMessageListener implements SessionAwareMessageListener<TextMessage> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQueueMessageListener.class);
+
+	@Autowired
+	private CommonService commonService;
 
 	public ServerQueueMessageListener() {
 		LOGGER.debug("생성자 ServerQueueMessageListener()");
@@ -32,13 +35,11 @@ public class ServerQueueMessageListener implements SessionAwareMessageListener<T
 		LOGGER.debug("JMSType:{}", message.getJMSType());
 		LOGGER.debug("{}", message.getText());
 
-		if ("inMemoryRefresh".equals(message.getJMSType())) {
+		if ("inMemoryCacheRefresh".equals(message.getJMSType())) {
 			String cacheName = message.getText();
 
-			LOGGER.debug("{}", AppContextAware.getAppCtx());
-			
-			CommonService commonService = AppContextAware.getAppCtx().getBean("commonServiceImpl", CommonService.class);
-			commonService.inMemoryRefresh(cacheName);
+			// CommonService commonService = AppContextAware.getAppCtx().getBean("commonServiceImpl", CommonService.class);
+			commonService.inMemoryCacheRefresh(cacheName);
 		}
 	}
 }

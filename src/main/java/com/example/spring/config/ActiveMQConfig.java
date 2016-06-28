@@ -117,7 +117,7 @@ public class ActiveMQConfig {
 
 	@Bean(name = "serverNameQueueList")
 	public List<ActiveMQQueue> serverNameQueueList() {
-		List<String> serverNameList = Splitter.on(CharMatcher.anyOf(",)")).trimResults().omitEmptyStrings()
+		List<String> serverNameList = Splitter.on(CharMatcher.anyOf(",")).trimResults().omitEmptyStrings()
 				.splitToList(environment.getRequiredProperty("server.name.list"));
 		List<ActiveMQQueue> queueList = new ArrayList<>();
 		for (String serverName : serverNameList) {

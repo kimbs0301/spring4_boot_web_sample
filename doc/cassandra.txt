@@ -5,18 +5,18 @@ https://archive.apache.org/dist/cassandra/2.1.14/
 
 http://wiki.apache.org/cassandra/GettingStarted
 
-ifconfig lo0 alias 127.0.0.10
 ifconfig lo0 alias 127.0.0.11
 ifconfig lo0 alias 127.0.0.12
 ifconfig lo0 alias 127.0.0.13
+ifconfig lo0 alias 127.0.0.14
 
 vi /tools/cassandra/2.1.14-01/conf/cassandra.yaml
 vi /tools/cassandra/2.1.14-02/conf/cassandra.yaml
 vi /tools/cassandra/2.1.14-03/conf/cassandra.yaml
 vi /tools/cassandra/2.1.14-04/conf/cassandra.yaml
-- seeds: "127.0.0.10,127.0.0.12"
-listen_address: 127.0.0.10
-rpc_address: 127.0.0.10
+- seeds: "127.0.0.11,127.0.0.13"
+listen_address: 127.0.0.11
+rpc_address: 127.0.0.11
 
 vi /tools/cassandra/2.1.14-01/conf/cassandra-env.sh
 vi /tools/cassandra/2.1.14-02/conf/cassandra-env.sh
@@ -64,10 +64,10 @@ sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 snapshot
 키스페이스 상태 보기
 sh /tools/cassandra/2.1.14-04/bin/nodetool -h 127.0.0.1 -p 7499 cfstats
 
-sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.10 9042
-sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.11 9042
-sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.12 9042
-sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.13 9042
+sh /tools/cassandra/2.1.14-01/bin/cqlsh 127.0.0.11 9042
+sh /tools/cassandra/2.1.14-02/bin/cqlsh 127.0.0.12 9042
+sh /tools/cassandra/2.1.14-03/bin/cqlsh 127.0.0.13 9042
+sh /tools/cassandra/2.1.14-04/bin/cqlsh 127.0.0.14 9042
 
 
 sh /tools/cassandra/apache-cassandra-2.1.14/bin/cassandra -f

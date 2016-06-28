@@ -41,13 +41,13 @@ public class CommonController {
 	}
 
 	/**
-	 * curl -v "http://localhost:8080/mvc/inMemoryRefresh/all"
+	 * curl -v "http://localhost:8080/mvc/inMemoryCacheRefresh/all"
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/inMemoryRefresh/{cacheName}", method = RequestMethod.GET)
-	public ResponseEntity<Void> inMemoryRefresh(@PathVariable String cacheName) {
-		commonService.startInMemoryRefresh(cacheName);
+	@RequestMapping(value = "/inMemoryCacheRefresh/{cacheName}", method = RequestMethod.GET)
+	public ResponseEntity<Void> inMemoryCacheRefresh(@PathVariable String cacheName) {
+		commonService.pushInMemoryCacheRefresh(cacheName);
 		
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.NO_CONTENT);

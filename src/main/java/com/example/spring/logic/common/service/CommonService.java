@@ -5,7 +5,7 @@ package com.example.spring.logic.common.service;
  * 
  */
 public interface CommonService {
-	public void startInMemoryRefresh(String cacheName);
+	public void pushInMemoryCacheRefresh(String cacheName);
 
-	public void inMemoryRefresh(String cacheName);
+	public void inMemoryCacheRefresh(String cacheName);
 }

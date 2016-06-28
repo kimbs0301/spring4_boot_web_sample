@@ -30,7 +30,7 @@ public class MimeUtils {
 
 	public static List<String> getMimeList(String s) {
 		List<String> result = new ArrayList<>();
-		List<String> mimeList = Splitter.on(CharMatcher.anyOf(",;)")).trimResults().omitEmptyStrings().splitToList(s);
+		List<String> mimeList = Splitter.on(CharMatcher.anyOf(",;")).trimResults().omitEmptyStrings().splitToList(s);
 		for (String mime : mimeList) {
 			if (MIME_TYPE_SET.contains(mime)) {
 				result.add(mime);
@@ -41,7 +41,7 @@ public class MimeUtils {
 
 	public static Set<String> getMimeSet(String s) {
 		Set<String> result = new HashSet<>();
-		List<String> mimeList = Splitter.on(CharMatcher.anyOf(",;)")).trimResults().omitEmptyStrings().splitToList(s);
+		List<String> mimeList = Splitter.on(CharMatcher.anyOf(",;")).trimResults().omitEmptyStrings().splitToList(s);
 		for (String mime : mimeList) {
 			if (MIME_TYPE_SET.contains(mime)) {
 				result.add(mime);
