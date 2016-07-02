@@ -54,10 +54,11 @@ public class Jackson2XmlTest {
 
 	@Test
 	public void test_readValue() throws Exception {
+		String xml = "<?xml version='1.0' encoding='UTF-8'?>\n<Simple><x>1</x><date>1466230353071</date></Simple>";
 		JacksonXmlModule module = new JacksonXmlModule();
 		module.setDefaultUseWrapper(false);
 		XmlMapper mapper = new XmlMapper(module);
-		Simple value = mapper.readValue("<Simple><x>1</x><date>1466230353071</date></Simple>", Simple.class);
+		Simple value = mapper.readValue(xml, Simple.class);
 		LOGGER.debug("{}", value);
 	}
 

@@ -41,15 +41,27 @@ public class CassandraTest {
 				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
 		Session session = cluster.connect("test");
 
-		session.execute("create table person (id text, event_time timestamp, name text, age int, primary key (id, event_time)) with CLUSTERING ORDER BY (event_time DESC)");
+		session.execute("CREATE TABLE person (id text, event_time timestamp, name text, age int, PRIMARY KEY (id, event_time)) WITH CLUSTERING ORDER BY (event_time DESC)");
 		session.execute("CREATE INDEX ix_person_name ON person (name)");
 
 		session.close();
 		cluster.close();
 	}
+	
+	@Test
+	public void test2_alterTable() throws Exception {
+		Cluster cluster = Cluster.builder().withClusterName("Test Cluster")
+				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
+		Session session = cluster.connect("test");
+		
+		session.execute("ALTER TABLE person ALTER age TYPE int");
+		
+		session.close();
+		cluster.close();
+	}
 
 	@Test
-	public void test2_insert() throws Exception {
+	public void test3_insert() throws Exception {
 		Cluster cluster = Cluster.builder().withClusterName("Test Cluster")
 				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
 		Session session = cluster.connect("test");
@@ -62,13 +74,13 @@ public class CassandraTest {
 	}
 
 	@Test
-	public void test3_selectList() throws Exception {
+	public void test4_selectList() throws Exception {
 		Cluster cluster = Cluster.builder().withClusterName("Test Cluster")
 				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
 		Session session = cluster.connect("test");
 		CassandraTemplate cassandraTemplate = new CassandraTemplate(session);
 
-		String cql = "SELECT * FROM person WHERE id in ('1234567890')";
+		String cql = "SELECT * FROM person WHERE id IN ('1234567890')";
 		List<Person> results = cassandraTemplate.select(cql, Person.class);
 		for (Person person : results) {
 			LOGGER.info("{}", person);
@@ -79,7 +91,7 @@ public class CassandraTest {
 	}
 
 	@Test
-	public void test4_truncateTable() throws Exception {
+	public void test5_truncateTable() throws Exception {
 		Cluster cluster = Cluster.builder().withClusterName("Test Cluster")
 				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
 		Session session = cluster.connect("test");
@@ -92,7 +104,7 @@ public class CassandraTest {
 	}
 
 	@Test
-	public void test5_dropKeyspace() throws Exception {
+	public void test6_dropKeyspace() throws Exception {
 		Cluster cluster = Cluster.builder().withClusterName("Test Cluster")
 				.addContactPoints(InetAddress.getByName("127.0.0.1")).build();
 		Session session = cluster.connect("test");

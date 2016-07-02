@@ -128,3 +128,4 @@ http://docs.spring.io/spring-data/cassandra/docs/1.4.2.RELEASE/reference/html/
 https://github.com/spring-projects/spring-data-cassandra
 https://dzone.com/articles/set-up-a-springdata-project-with-apache-cassandra
 http://docs.datastax.com/en/cql/3.1/cql/cql_reference/capture_r.html
+http://docs.datastax.com/en/cql/3.1/cql/cql_reference/alter_table_r.html
