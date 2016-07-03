@@ -16,7 +16,7 @@
 		overflowToDisk="false"
 		eternal="false"
 		transactionalMode="off"
-		diskPersistent="false"
+		diskPersistent="false">
 	</cache>
 
 </ehcache>

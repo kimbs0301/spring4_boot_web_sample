@@ -48,7 +48,7 @@ public class CommonController {
 	@RequestMapping(value = "/inMemoryCacheRefresh/{cacheName}", method = RequestMethod.GET)
 	public ResponseEntity<Void> inMemoryCacheRefresh(@PathVariable String cacheName) {
 		commonService.pushInMemoryCacheRefresh(cacheName);
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.NO_CONTENT);
 	}
@@ -76,6 +76,12 @@ public class CommonController {
 		}).start();
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.NO_CONTENT);
+	}
+
+	@RequestMapping(value = "/error/{errorPage}", method = RequestMethod.GET)
+	public String error(@PathVariable String errorPage) {
+		LOGGER.error("{}", errorPage);
+		return new StringBuilder().append("/error/").append(errorPage).toString();
 	}
 
 	/**

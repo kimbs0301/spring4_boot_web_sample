@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration.EmbeddedServletContainerCustomizerBeanPostProcessorRegistrar;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author gimbyeongsu
@@ -52,6 +54,10 @@ public class EmbeddedTomcatConfig {
 		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory(contextPath, port);
 
 		factory.setBaseProtocol("org.apache.coyote.http11.Http11NioProtocol");
+
+		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404"));
+		factory.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500"));
+
 		// MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
 		MimeMappings mappings = new MimeMappings();
 		mappings.add("html", "text/html;charset=UTF-8");
@@ -98,7 +104,7 @@ public class EmbeddedTomcatConfig {
 				connector.setEnableLookups(false);
 				connector.setURIEncoding("UTF-8");
 				connector.setXpoweredBy(false);
-				
+
 				connector.setProperty("acceptCount", "30");
 				connector.setProperty("acceptorThreadCount", "1");
 				connector.setProperty("acceptorThreadPriority", "5");
@@ -109,7 +115,7 @@ public class EmbeddedTomcatConfig {
 				connector.setProperty("maxThreads", "150");
 				connector.setProperty("minSpareThreads", "150");
 				connector.setProperty("maxSpareThreads", "150");
-				
+
 				connector.setProperty("socket.directBuffer", "true");
 				connector.setProperty("socket.rxBufSize", "25188");
 				connector.setProperty("socket.txBufSize", "43800");
@@ -122,7 +128,7 @@ public class EmbeddedTomcatConfig {
 				connector.setProperty("socket.eventCache", "500");
 				connector.setProperty("socket.tcpNoDelay", "true");
 				connector.setProperty("socket.soKeepAlive", "false");
-				
+
 				connector.setProperty("connectionTimeout", "3000");
 				// connector.setProperty("connectionLinger", "0");
 				connector.setProperty("socket.soTimeout", "5000");
@@ -140,7 +146,7 @@ public class EmbeddedTomcatConfig {
 		factory.addAdditionalTomcatConnectors(createSslConnector());
 		return factory;
 	}
-	
+
 	private Connector createSslConnector() {
 		int port = environment.getRequiredProperty("server.https.port", Integer.class);
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
@@ -149,7 +155,7 @@ public class EmbeddedTomcatConfig {
 		connector.setSecure(true);
 		connector.setPort(port);
 		connector.setEnableLookups(false);
-		
+
 		connector.setProperty("acceptCount", "10");
 		connector.setProperty("acceptorThreadCount", "1");
 		connector.setProperty("acceptorThreadPriority", "5");
@@ -160,7 +166,7 @@ public class EmbeddedTomcatConfig {
 		connector.setProperty("maxThreads", "10");
 		connector.setProperty("minSpareThreads", "10");
 		connector.setProperty("maxSpareThreads", "10");
-		
+
 		connector.setProperty("socket.directBuffer", "true");
 		connector.setProperty("socket.rxBufSize", "25188");
 		connector.setProperty("socket.txBufSize", "43800");
@@ -177,7 +183,7 @@ public class EmbeddedTomcatConfig {
 		// connector.setProperty("connectionLinger", "0");
 		connector.setProperty("socket.soTimeout", "5000");
 		connector.setProperty("useComet", "false");
-		
+
 		Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
 		File keystore = new File("file/ssl/tomcat.jks");
 		File truststore = new File("file/ssl/truststore.jks");
