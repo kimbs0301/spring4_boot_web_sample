@@ -1,6 +1,7 @@
 package com.example.spring.config;
 
 import java.io.Writer;
+import java.util.List;
 
 import javax.annotation.PreDestroy;
 import javax.xml.stream.XMLInputFactory;
@@ -25,6 +26,9 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * @author gimbyeongsu
@@ -47,14 +51,25 @@ public class RootConfig {
 	@Bean(name = "configProperties")
 	public PropertiesFactoryBean configProperties() {
 		PropertiesFactoryBean properties = new PropertiesFactoryBean();
-		String[] profiles = environment.getActiveProfiles();
-		ClassPathResource[] classPathResources = new ClassPathResource[profiles.length];
-		for (int i = 0; i < profiles.length; ++i) {
-			String profile = profiles[i];
+		String[] activeProfiles = environment.getActiveProfiles();
+		List<String> profiles = Lists.newArrayList(Collections2.filter(Lists.newArrayList(activeProfiles),
+				new Predicate<String>() {
+
+					@Override
+					public boolean apply(String input) {
+						if ("api".equals(input) || "web".equals(input)) {
+							return false;
+						}
+						return true;
+					}
+				}));
+		ClassPathResource[] classPathResources = new ClassPathResource[profiles.size()];
+		for (int i = 0; i < profiles.size(); ++i) {
+			String profile = profiles.get(i);
 			if ("junit".equals(profile) || "local".equals(profile)) {
-				classPathResources[i] = new ClassPathResource("application-" + profiles[i] + ".properties");
+				classPathResources[i] = new ClassPathResource("application-" + profile + ".properties");
 			} else {
-				classPathResources[i] = new ClassPathResource("config/application-" + profiles[i] + ".properties");
+				classPathResources[i] = new ClassPathResource("config/application-" + profile + ".properties");
 			}
 		}
 		properties.setLocations(classPathResources);

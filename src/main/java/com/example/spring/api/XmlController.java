@@ -1,4 +1,4 @@
-package com.example.spring.web;
+package com.example.spring.api;
 
 import java.util.ArrayList;
 import java.util.List;
