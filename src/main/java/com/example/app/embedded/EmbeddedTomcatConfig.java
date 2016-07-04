@@ -55,8 +55,7 @@ public class EmbeddedTomcatConfig {
 
 		factory.setBaseProtocol("org.apache.coyote.http11.Http11NioProtocol");
 
-		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404"));
-		factory.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500"));
+		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404"), new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500"));
 
 		// MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
 		MimeMappings mappings = new MimeMappings();
