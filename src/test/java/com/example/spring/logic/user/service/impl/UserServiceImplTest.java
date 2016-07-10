@@ -5,15 +5,11 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.app.junit.JunitConfig;
+import com.example.app.junit.JunitSpringAnnotation;
 import com.example.spring.logic.member.service.impl.MemberServiceImplTest;
 import com.example.spring.logic.user.service.UserService;
 
@@ -22,13 +18,10 @@ import com.example.spring.logic.user.service.UserService;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { JunitConfig.class })
-@WebAppConfiguration
-@ActiveProfiles(profiles = { "junit" })
-@TestPropertySource(locations = "classpath:application-junit.properties")
+@JunitSpringAnnotation
 @Transactional
 public class UserServiceImplTest {
-private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImplTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImplTest.class);
 	
 	@Autowired
 	private UserService userService;

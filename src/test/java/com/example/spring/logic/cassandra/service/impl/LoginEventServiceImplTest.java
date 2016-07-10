@@ -5,14 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.example.app.junit.JunitConfig;
+import com.example.app.junit.JunitSpringAnnotation;
 import com.example.spring.logic.cassandra.service.LoginEventService;
 
 /**
@@ -21,10 +17,7 @@ import com.example.spring.logic.cassandra.service.LoginEventService;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { JunitConfig.class })
-@WebAppConfiguration
-@ActiveProfiles(profiles = { "junit" })
-@TestPropertySource(locations = "classpath:application-junit.properties")
+@JunitSpringAnnotation
 public class LoginEventServiceImplTest {
 
 	@Autowired

@@ -11,18 +11,14 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.querybuilder.Delete;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Update;
-import com.example.app.junit.JunitConfig;
+import com.example.app.junit.JunitSpringAnnotation;
 import com.example.spring.logic.cassandra.model.Person;
 
 /**
@@ -31,10 +27,7 @@ import com.example.spring.logic.cassandra.model.Person;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { JunitConfig.class })
-@WebAppConfiguration
-@ActiveProfiles(profiles = { "junit" })
-@TestPropertySource(locations = "classpath:application-junit.properties")
+@JunitSpringAnnotation
 public class CassandraConfigTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraConfigTest.class);
 

@@ -16,25 +16,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.example.app.junit.JunitConfig;
+import com.example.app.junit.JunitSpringAnnotation;
 
 /**
  * @author gimbyeongsu
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { JunitConfig.class })
-@WebAppConfiguration
-@ActiveProfiles(profiles = { "junit" })
-@TestPropertySource(locations = "classpath:application-junit.properties")
+@JunitSpringAnnotation
 public class ActiveMQConfigTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQConfigTest.class);
 
@@ -53,12 +46,11 @@ public class ActiveMQConfigTest {
 	@Autowired
 	private ActiveMQQueue ackQueue;
 
-	@Ignore
 	@Test
 	public void test_echo() throws Exception {
 		jmsTemplate.setDeliveryMode(DeliveryMode.PERSISTENT);
 
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i < 10; ++i) {
 			String text = UUID.randomUUID().toString();
 			jmsTemplate.send(defaultQueue, new MessageCreator() {
 
