@@ -51,6 +51,7 @@ for ((i=1;i<=100000;i++)); do curl -H "Content-Type:application/json; charset=ut
 for ((i=1;i<=100000;i++)); do curl -X POST -H "Content-Type:application/xml; charset=utf-8" -H "Accept: application/xml" -d '<?xml version="1.0" encoding="UTF-8"?><user><id>1</id></user>' "http://localhost:8080/mvc/xml/data.xml"; echo "
 "; done
 
+curl -vk -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" -d '{"id":1,"username":"KKK"}' "https://localhost:8443/mvc/json/data.json" | python -m json.tool
 
 
 #! /bin/bash

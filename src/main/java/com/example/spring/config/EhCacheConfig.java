@@ -25,16 +25,16 @@ public class EhCacheConfig {
 		LOGGER.debug("생성자 EhCacheConfig()");
 	}
 
-	@Bean
-	public CacheManager cacheManager() {
-		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
-	}
-
-	@Bean
+	@Bean(destroyMethod = "destroy")
 	public EhCacheManagerFactoryBean ehCacheCacheManager() {
 		EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
 		cmfb.setConfigLocation(new ClassPathResource("ehcache.xml"));
 		cmfb.setShared(true);
 		return cmfb;
+	}
+
+	@Bean
+	public CacheManager cacheManager() {
+		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
 	}
 }
