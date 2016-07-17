@@ -1,6 +1,7 @@
 package com.example.spring.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,13 @@ public class AfterConfig {
 		Map<String, Object> map = applicationContext.getBeansWithAnnotation(Configuration.class);
 		for (String key : map.keySet()) {
 			LOGGER.debug("{} {}", key, map.get(key));
+		}
+
+		LOGGER.debug("");
+		String[] beanNames = applicationContext.getBeanDefinitionNames();
+		Arrays.sort(beanNames);
+		for (String beanName : beanNames) {
+			LOGGER.debug("{}", beanName);
 		}
 		return map;
 	}
