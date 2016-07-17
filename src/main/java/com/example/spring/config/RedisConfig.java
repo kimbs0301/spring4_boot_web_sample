@@ -35,7 +35,7 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public JedisPool JedisPool() {
+	public JedisPool jedisPool() {
 		GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
 		poolConfig.setMaxTotal(50);
 		poolConfig.setMaxIdle(30);

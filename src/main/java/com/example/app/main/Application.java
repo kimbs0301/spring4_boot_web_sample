@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
@@ -59,9 +60,11 @@ import com.example.spring.config.WebAppContextConfig;
 		SpringApplicationAdminJmxAutoConfiguration.class, //
 		AopAutoConfiguration.class, //
 		DataSourceTransactionManagerAutoConfiguration.class, //
+		JtaAutoConfiguration.class, //
 		ConfigurationPropertiesAutoConfiguration.class, //
 		HttpEncodingAutoConfiguration.class, //
-		MultipartAutoConfiguration.class })
+		MultipartAutoConfiguration.class //
+})
 @ComponentScan(basePackages = { "com.example.spring" }, basePackageClasses = { EmbeddedTomcatConfig.class }, excludeFilters = {
 		@Filter(value = { WebAppContextConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
 		@Filter(pattern = { "com.example.spring.*.model.*", "com.example.spring.*.web.*", "com.example.spring.*.api.*" }, type = FilterType.REGEX) })
