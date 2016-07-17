@@ -21,7 +21,10 @@ import com.example.spring.logic.jms.QueueMessageListener;
 import com.example.spring.logic.jms.ServerQueueMessageListener;
 import com.example.spring.logic.jms.TopicMessageListener;
 import com.google.common.base.CharMatcher;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * @author gimbyeongsu
@@ -145,8 +148,19 @@ public class ActiveMQConfig {
 	}
 
 	private String getProfile() {
-		String[] profiles = environment.getActiveProfiles();
-		String profile = profiles[0];
+		String[] activeProfiles = environment.getActiveProfiles();
+		List<String> profiles = Lists.newArrayList(Collections2.filter(Lists.newArrayList(activeProfiles),
+				new Predicate<String>() {
+
+					@Override
+					public boolean apply(String input) {
+						if ("api".equals(input) || "web".equals(input)) {
+							return false;
+						}
+						return true;
+					}
+				}));
+		String profile = profiles.get(0);
 		return profile;
 	}
 }
