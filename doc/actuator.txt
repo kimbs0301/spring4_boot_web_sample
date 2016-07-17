@@ -15,3 +15,8 @@ curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/j
 curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/beans.json" | python -m json.tool
 
 curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/metrics.json" | python -m json.tool
+
+
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-actuator-ui
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-actuator
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-actuator-noweb
