@@ -1,0 +1,17 @@
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/info.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/configprops.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/trace.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/health.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/env.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/mappings.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/dump.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/beans.json" | python -m json.tool
+
+curl -H "Content-Type:application/json; charset=utf-8" -H "Accept: application/json; charset=utf-8" "http://localhost:8080/mvc/metrics.json" | python -m json.tool

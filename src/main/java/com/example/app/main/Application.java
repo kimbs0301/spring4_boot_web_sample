@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.PropertyPlaceholderAutoConfiguration;
 import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
@@ -41,8 +40,7 @@ import com.example.spring.config.WebAppContextConfig;
  * 
  */
 @Configurable
-@EnableAutoConfiguration(exclude = { PropertyPlaceholderAutoConfiguration.class, //
-		EmbeddedServletContainerAutoConfiguration.class, //
+@EnableAutoConfiguration(exclude = { EmbeddedServletContainerAutoConfiguration.class, //
 		DispatcherServletAutoConfiguration.class, //
 		ErrorMvcAutoConfiguration.class, //
 		CassandraAutoConfiguration.class, //
