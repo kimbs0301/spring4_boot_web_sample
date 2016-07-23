@@ -6,10 +6,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.autoconfigure.AuditAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.CacheStatisticsAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.EndpointWebMvcAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.HealthIndicatorAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerPropertiesAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.MetricExportAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
@@ -31,6 +33,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityFilterAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
@@ -96,7 +99,10 @@ import com.example.spring.config.WebMvcConfig;
 		MetricExportAutoConfiguration.class, //
 		MetricsDropwizardAutoConfiguration.class, //
 		TraceRepositoryAutoConfiguration.class, //
-		TraceWebFilterAutoConfiguration.class //
+		TraceWebFilterAutoConfiguration.class, //
+		ManagementWebSecurityAutoConfiguration.class, //
+		CacheStatisticsAutoConfiguration.class, //
+		SecurityFilterAutoConfiguration.class //
 })
 @ComponentScan(basePackages = { "com.example.spring" }, excludeFilters = {
 		@Filter(value = { WebAppContextConfig.class, WebMvcConfig.class, DelegatingWebMvcConfig.class }, type = FilterType.ASSIGNABLE_TYPE),
